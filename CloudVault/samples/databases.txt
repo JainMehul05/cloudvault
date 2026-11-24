@@ -1,0 +1,1 @@
+Relational databases organize structured records into tables with rows and columns. SQL queries select, filter and join information. Transactions preserve consistency and foreign keys enforce relationships. Indexes speed retrieval. SQLite stores a complete database in a local file.

@@ -1,0 +1,36 @@
+{
+  "label": "baseline",
+  "health": {
+    "status": "ok",
+    "version": "1.0.0",
+    "storage": "aws",
+    "model_loaded": true
+  },
+  "latency_ms": {
+    "health": {
+      "first": 4.73,
+      "warm_median": 3.61,
+      "warm_max": 4.1
+    },
+    "list": {
+      "first": 45.77,
+      "warm_median": 12.15,
+      "warm_max": 12.62
+    },
+    "keyword": {
+      "first": 21.8,
+      "warm_median": 13.59,
+      "warm_max": 16.21
+    },
+    "semantic": {
+      "first": 136.14,
+      "warm_median": 38.02,
+      "warm_max": 43.25
+    },
+    "hybrid": {
+      "first": 35.29,
+      "warm_median": 36.19,
+      "warm_max": 36.7
+    }
+  }
+}

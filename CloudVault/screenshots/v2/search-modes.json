@@ -1,0 +1,27 @@
+[
+  {
+    "mode": "Exact keyword",
+    "headings": [
+      "Smart Search",
+      "Find the file behind the idea."
+    ]
+  },
+  {
+    "mode": "Hybrid",
+    "headings": [
+      "Smart Search",
+      "Find the file behind the idea.",
+      "1 matching file",
+      "water-conservation.txt"
+    ]
+  },
+  {
+    "mode": "Filename",
+    "headings": [
+      "Smart Search",
+      "Find the file behind the idea.",
+      "1 matching file",
+      "water-conservation.txt"
+    ]
+  }
+]

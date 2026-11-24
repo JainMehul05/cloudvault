@@ -1,0 +1,1 @@
+Cloud computing delivers on-demand computing resources over the internet. Customers rent capacity rather than owning every server. Elasticity adjusts resources to demand. Shared responsibility separates provider infrastructure security from customer data protection.

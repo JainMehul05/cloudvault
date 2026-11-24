@@ -1,0 +1,1 @@
+Amazon S3 provides scalable object storage and remotely managed infrastructure. Digital documents, photographs and backups reside in buckets. Each object has a unique key and metadata. Applications retrieve original bytes through authenticated HTTPS requests. Sydney is the selected region for this CloudVault workspace.

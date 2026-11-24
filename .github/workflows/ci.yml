@@ -1,0 +1,149 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.claude/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.claude/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  FORCE_COLOR: 1
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      ui: ${{ steps.filter.outputs.ui }}
+      chat: ${{ steps.filter.outputs.chat }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'lib/**'
+              - 'src/lambda/**'
+              - 'tests/**'
+              - 'requirements.txt'
+            ui:
+              - 'src/ui/**'
+            chat:
+              - 'src/ragstack-chat/**'
+
+  backend:
+    name: Backend Lint & Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    env:
+      AWS_DEFAULT_REGION: us-east-1
+      PYTHONPATH: ${{ github.workspace }}/lib
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+
+      - name: Setup Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.13'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+
+      - name: Install dependencies
+        run: uv pip install --system -r requirements.txt
+
+      - name: Ruff check
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format . --check
+
+      - name: Vulture dead code check
+        run: uvx vulture lib/ src/lambda/ vulture_whitelist.py --min-confidence 90
+
+      - name: Mypy type check
+        run: uv run mypy lib/ src/lambda/
+
+      - name: Tests with coverage
+        run: uv run pytest tests/unit/python/ -m 'not integration' -v --tb=short --cov=lib --cov=src/lambda --cov-fail-under=60
+
+  ui:
+    name: UI Lint & Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: changes
+    if: needs.changes.outputs.ui == 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: src/ui/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./src/ui
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./src/ui
+        run: npm run lint
+
+      - name: Tests
+        working-directory: ./src/ui
+        run: npm test
+
+  chat:
+    name: RagStack Chat Lint, Typecheck & Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: changes
+    if: needs.changes.outputs.chat == 'true'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: src/ragstack-chat/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./src/ragstack-chat
+        run: npm ci
+
+      - name: Setup generated config for CI
+        run: cp src/ragstack-chat/src/amplify-config.template.ts src/ragstack-chat/src/amplify-config.generated.ts
+
+      - name: Lint
+        working-directory: ./src/ragstack-chat
+        run: npm run lint
+
+      - name: Type check
+        working-directory: ./src/ragstack-chat
+        run: npx tsc --noEmit
+
+      - name: Tests
+        working-directory: ./src/ragstack-chat
+        run: npm test
+

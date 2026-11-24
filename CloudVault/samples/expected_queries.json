@@ -1,0 +1,22 @@
+[
+  {
+    "query": "Where can I store my digital files remotely?",
+    "expected": "object-storage.txt"
+  },
+  {
+    "query": "How can I protect information from hackers?",
+    "expected": "network-security.txt"
+  },
+  {
+    "query": "How do computers learn from examples?",
+    "expected": "machine-learning.txt"
+  },
+  {
+    "query": "How can structured information be stored and retrieved?",
+    "expected": "databases.txt"
+  },
+  {
+    "query": "Which documents discuss environmentally friendly energy?",
+    "expected": "renewable-energy.txt"
+  }
+]

@@ -1,0 +1,1 @@
+Machine learning trains statistical models on example observations. During training an algorithm adjusts parameters to recognize patterns and generalize to unseen inputs. Supervised learning uses labeled examples. Sentence embeddings represent language as numerical vectors whose directions capture meaning.
