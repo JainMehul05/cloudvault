@@ -621,14 +621,5 @@ The implementation handover references these files under `docs/`. Use the actual
 | `SECURITY.md` | Security boundaries |
 | `COST_AND_CLEANUP.md` | AWS cost and safe cleanup |
 
-## Attribution and license
-
-CloudVault is a customized academic implementation based on the open-source [RAGStack-Lambda](https://github.com/HatmanStack/RAGStack-Lambda) project by HatmanStack and its contributors. The upstream implementation uses the Apache License 2.0; preserve its copyright notices, `LICENSE` and `NOTICE` when redistributing applicable code. See the actual project license and notices for the terms governing the customized distribution and any third-party components.
-
-CloudVault's reported modifications include a separate local React/FastAPI application, private S3 integration, persistent SQLite indexing, local semantic and hybrid retrieval, a local RAG assistant, evidence validation, redesigned file management, setup automation and evaluation documentation. AI-assisted development should be acknowledged in accordance with institutional requirements.
-
-Third-party models, libraries, fonts and runtime software remain subject to their respective licenses. Useful technical references include [Amazon S3 documentation](https://docs.aws.amazon.com/s3/), [Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html), [FastAPI](https://fastapi.tiangolo.com/), [Sentence Transformers](https://www.sbert.net/), [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), and [Ollama](https://ollama.com/).
-
----
 
 **CloudVault** — cloud storage, intelligent retrieval and evidence-backed answers in one private workspace.
