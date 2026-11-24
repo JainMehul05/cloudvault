@@ -34,6 +34,7 @@ Built as a cloud computing lab project, CloudVault demonstrates a practical hybr
 - [Security and cost management](#security-and-cost-management)
 - [Lab demonstration](#lab-demonstration)
 - [Limitations and roadmap](#limitations-and-roadmap)
+- [Documentation](#documentation)
 - [Attribution and license](#attribution-and-license)
 
 ## Why CloudVault?
@@ -83,34 +84,38 @@ The assistant searches the indexed corpus and selects relevant passages. It does
 
 ## System architecture
 
-```mermaid
-flowchart TB
-    U[User in browser] --> UI[React + TypeScript workspace]
-    UI -->|HTTP REST API| API[FastAPI on localhost]
-    subgraph Local[Local laptop]
-        API --> FM[File management service]
-        API --> IDX[Extraction and indexing]
-        API --> RET[Semantic and hybrid retrieval]
-        API --> RAG[Document question answering]
-        IDX --> EMB[MiniLM embedding model]
-        IDX --> DB[(SQLite metadata and chunks)]
-        EMB --> DB
-        RET --> EMB
-        RET --> DB
-        RAG --> RET
-        RAG --> CTX[Evidence and context selection]
-        CTX --> LLM[Ollama / Qwen2.5 3B]
-        LLM --> VAL[Citation and evidence validation]
-        VAL --> API
-    end
-    subgraph AWS[AWS - Sydney region]
-        S3[(Private Amazon S3 bucket)]
-        IAM[AWS identity and permissions]
-    end
-    FM -->|Boto3 authenticated requests| S3
-    IAM -. authorizes .-> FM
-    FM --> IDX
-    FM --> DB
+```text
+User in browser
+       |
+       v
+React + TypeScript workspace
+       | HTTP REST API
+       v
+FastAPI (localhost)
+       |
+       +-- File management -- Boto3 --> Private Amazon S3 (Sydney)
+       |                                    ^
+       |                             AWS IAM permissions
+       +-- Extraction and indexing --> MiniLM embeddings
+       |                                    |
+       +----------------------------------> SQLite
+       |                                    ^
+       +-- Semantic / hybrid retrieval -----+
+       |        |                           |
+       |        +--> MiniLM                 |
+       +-- Document Q&A --> Retrieval ------+
+                 |
+                 v
+           Evidence selection
+                 |
+                 v
+           Ollama / Qwen2.5 3B
+                 |
+                 v
+           Citation validation --> FastAPI --> Browser
+
+Local: application, SQLite, embeddings, retrieval and generation
+AWS: private original file objects and cloud access permissions
 ```
 
 **Cloud boundary:** S3 stores original file objects. SQLite, extracted text, vectors, conversations and both AI models remain on the laptop. AWS IAM/STS authenticate cloud access; they are not application user accounts. The website is not hosted on AWS.
@@ -119,94 +124,106 @@ flowchart TB
 
 ### 1. Upload and indexing pipeline
 
-```mermaid
-flowchart TD
-    A[Select or drop file] --> B[Validate name, type and size]
-    B --> C{Valid upload?}
-    C -->|No| X[Show validation error]
-    C -->|Yes| D[Assign unique object key]
-    D --> E[Upload original bytes to private S3]
-    E --> F{Stored successfully?}
-    F -->|No| Y[Report cloud error]
-    F -->|Yes| G[Persist file metadata]
-    G --> H{Supported extractable content?}
-    H -->|No| I[Stored but not content-indexed]
-    H -->|Yes| J[Extract and normalize text]
-    J --> K[Create bounded overlapping chunks]
-    K --> L[Generate normalized 384-D embeddings]
-    L --> M[Persist chunks and vectors in SQLite]
-    M --> N[Mark indexed and enable search]
-    J -. extraction failure .-> O[Retain original and report indexing issue]
-    L -. model failure .-> O
+```text
+Select or drop file
+  |
+  v
+Validate name, type and size
+  +-- Invalid --> Show validation error
+  |
+  v
+Assign unique object key --> Upload original to private S3
+  +-- Storage failure --> Report cloud error
+  |
+  v
+Persist metadata --> Check extractable content
+  +-- Unsupported --> Stored but not content-indexed
+  |
+  v
+Extract and normalize text --> Create overlapping chunks
+  |
+  v
+Generate normalized 384-dimensional embeddings
+  |
+  v
+Persist chunks and vectors in SQLite --> Mark indexed
+
+Extraction or model failure: retain original, report indexing issue.
 ```
 
 An S3 upload and local indexing are distinct operations. A file can be successfully stored even if extraction fails. The database tracks its status and supports recovery/reindexing without pretending that an unsupported file is searchable.
 
 ### 2. Search workflow
 
-```mermaid
-flowchart LR
-    Q[Search query] --> M{Search mode}
-    M -->|Filename| F[Filename matching]
-    M -->|Exact| E[Literal content matching]
-    M -->|Semantic| S[MiniLM query vector]
-    M -->|Hybrid| H[Dense and lexical candidates]
-    S --> C[Cosine similarity]
-    H --> R[Rank fusion]
-    F --> A[Aggregate and filter files]
-    E --> A
-    C --> A
-    R --> A
-    A --> O[Ranked files, snippets and source actions]
+```text
+Search query --> Select search mode
+  |
+  +-- Filename --> Filename matching ------------------+
+  +-- Exact -----> Literal content matching ------------+
+  +-- Semantic --> MiniLM vector --> Cosine similarity -+
+  +-- Hybrid ----> Dense + lexical --> Rank fusion -----+
+                                                        |
+                                                        v
+                                             Aggregate and filter files
+                                                        |
+                                                        v
+                                             Ranked files and snippets
 ```
 
 ### 3. Retrieval-augmented generation (RAG)
 
-```mermaid
-flowchart TD
-    Q[Question and selected scope] --> R[Retrieve dense and lexical passages]
-    R --> D[Rank, deduplicate and select evidence]
-    D --> E{Sufficient relevant evidence?}
-    E -->|No| N[Explain insufficient evidence]
-    E -->|Yes| C[Build bounded context with source IDs]
-    C --> L{Local generator available?}
-    L -->|No| F[Explicit cited extractive fallback]
-    L -->|Yes| G[Qwen generates a grounded answer]
-    G --> V[Validate citation IDs and supporting quotations]
-    V --> P{Validation acceptable?}
-    P -->|No| F
-    P -->|Yes| A[Answer with clickable citations]
-    A --> S[Open source passage or download original]
+```text
+Question and selected scope
+  |
+  v
+Retrieve dense and lexical passages
+  |
+  v
+Rank, deduplicate and select evidence
+  +-- Insufficient evidence --> Explain limitation
+  |
+  v
+Build bounded context with source IDs
+  +-- Generator unavailable --> Cited extractive fallback
+  |
+  v
+Qwen generates grounded answer
+  |
+  v
+Validate source IDs and supporting quotations
+  +-- Validation fails --> Cited extractive fallback
+  |
+  v
+Answer with clickable citations
+  |
+  v
+Open source passage or download original
 ```
 
 The generative model receives relevant source passages, not AWS credentials or unrestricted execution tools. Uploaded text is treated as evidence rather than instructions. The original file can be downloaded from S3 independently of whether the AI model is available.
 
 ### 4. Cloud upload and download sequence
 
-```mermaid
-sequenceDiagram
-    actor User
-    participant UI as React UI
-    participant API as FastAPI
-    participant S3 as Amazon S3
-    participant DB as SQLite
-    participant AI as MiniLM
-    User->>UI: Upload document
-    UI->>API: Multipart upload
-    API->>API: Validate and assign object key
-    API->>S3: Authenticated PutObject
-    S3-->>API: Storage result
-    API->>DB: Record metadata and status
-    API->>AI: Extract text and embed chunks
-    AI-->>API: Normalized vectors
-    API->>DB: Save chunks and indexing status
-    API-->>UI: File and indexing status
-    User->>UI: Download original
-    UI->>API: Request file by ID
-    API->>DB: Resolve permitted object key
-    API->>S3: Authenticated GetObject
-    S3-->>API: Original bytes
-    API-->>UI: File download
+```text
+UPLOAD
+  User     --> React UI : Select document
+  React UI --> FastAPI  : Multipart upload
+  FastAPI  --> FastAPI  : Validate and assign object key
+  FastAPI  --> Amazon S3: Authenticated PutObject
+  Amazon S3--> FastAPI  : Storage result
+  FastAPI  --> SQLite   : Record metadata and status
+  FastAPI  --> MiniLM   : Embed extracted text chunks
+  MiniLM   --> FastAPI  : Normalized vectors
+  FastAPI  --> SQLite   : Save chunks and indexing status
+  FastAPI  --> React UI : File and indexing status
+
+DOWNLOAD
+  User     --> React UI : Request original
+  React UI --> FastAPI  : Request file by ID
+  FastAPI  --> SQLite   : Resolve permitted object key
+  FastAPI  --> Amazon S3: Authenticated GetObject
+  Amazon S3--> FastAPI  : Original bytes
+  FastAPI  --> React UI : File download
 ```
 
 ## Search and AI algorithms
@@ -217,8 +234,8 @@ CloudVault uses `sentence-transformers/all-MiniLM-L6-v2` to map a text chunk or 
 
 Cosine similarity compares query vector **q** and passage vector **d**:
 
-```math
-\operatorname{cosine}(q,d)=\frac{q\cdot d}{\lVert q\rVert_2\lVert d\rVert_2}
+```text
+cosine(q, d) = (q · d) / (||q||₂ × ||d||₂)
 ```
 
 For normalized vectors this reduces to their dot product, which can be computed efficiently with NumPy. A cosine score is a ranking signal, **not** a probability of correctness or an accuracy percentage.
@@ -227,8 +244,8 @@ For normalized vectors this reduces to their dot product, which can be computed 
 
 Semantic retrieval is helpful for paraphrases; lexical and literal matching are helpful for exact identifiers, names and technical terms. CloudVault combines ranked candidates using reciprocal rank fusion (RRF), with the reported baseline using `k = 60`:
 
-```math
-\operatorname{RRF}(d)=\sum_{r\in R}\frac{1}{k+\operatorname{rank}_r(d)}
+```text
+RRF(d) = sum over r in R of [1 / (k + rank_r(d))]
 ```
 
 Candidates absent from a ranked list make no contribution for that list. File search aggregates useful passages by original file; RAG selects passage-level evidence across files. The 2.0 migration introduced lexical search support while preserving the existing embeddings.
@@ -430,32 +447,20 @@ Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/api/ai/ask -ContentTyp
 
 ### Conceptual data model
 
-```mermaid
-erDiagram
-    FILE ||--o{ CHUNK : contains
-    CONVERSATION ||--o{ MESSAGE : contains
-    FILE {
-        string id PK
-        string object_key
-        string filename
-        int size_bytes
-        string indexing_status
-    }
-    CHUNK {
-        string id PK
-        string file_id FK
-        string extracted_text
-        binary embedding
-        string source_reference
-    }
-    CONVERSATION {
-        string id PK
-    }
-    MESSAGE {
-        string id PK
-        string conversation_id FK
-        string content
-    }
+```text
+FILE (1) -------------------- (0..many) CHUNK
+  id [PK]                        id [PK]
+  object_key                     file_id [FK]
+  filename                       extracted_text
+  size_bytes                     embedding (binary)
+  indexing_status                source_reference
+
+CONVERSATION (1) ------------ (0..many) MESSAGE
+  id [PK]                        id [PK]
+                                 conversation_id [FK]
+                                 content
+
+PK = Primary key; FK = Foreign key
 ```
 
 This diagram illustrates logical relationships, not literal SQLite DDL. The database is local and contains private extracted text and vectors; protect and back it up. S3 originals alone do not necessarily reconstruct all local metadata or conversation history.
