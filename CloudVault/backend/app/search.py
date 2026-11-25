@@ -1,6 +1,7 @@
 from .database import connect, public_file
 from .retrieval import snapshot, _query
 from .config import settings
+from .cloud import dense_scores
 
 
 def snippet(text, query):
@@ -21,6 +22,7 @@ def search(query, mode, top_k, threshold, extension=""):
             if not extension or r["extension"] == extension
         }
     semantic, literal = {}, {}
+    provider = {"provider": "local_lexical", "aws_calls": 0, "fallback": False}
     if mode in {"keyword", "hybrid", "filename"}:
         for file_id, record in files.items():
             text = record["name"] if mode == "filename" else record["extracted_text"]
@@ -35,7 +37,7 @@ def search(query, mode, top_k, threshold, extension=""):
         vector = _query(settings.embedding_model, query)
         compatible, matrix = snapshot()
         if compatible:
-            scores = matrix @ vector
+            scores, provider = dense_scores(compatible, matrix, vector)
             for chunk, score in zip(compatible, scores):
                 if chunk["file_id"] not in files:
                     continue
@@ -76,4 +78,10 @@ def search(query, mode, top_k, threshold, extension=""):
                 else "literal occurrences",
             }
         )
-    return {"results": results, "total": len(keys), "mode": mode, "query": query}
+    return {
+        "results": results,
+        "total": len(keys),
+        "mode": mode,
+        "query": query,
+        "retrieval_backend": provider,
+    }

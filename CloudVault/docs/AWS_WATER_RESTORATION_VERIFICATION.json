@@ -1,0 +1,110 @@
+{
+  "started_at": "2026-11-24T17:03:32.872826+00:00",
+  "file_id": "b39aa36d-d2b7-475e-bca0-06739093298c",
+  "upload_method": "normal_CloudVault_multipart_API",
+  "entry": "manual_reconciliation_via_SQS; native EventBridge delivery already verified separately",
+  "new_original_created_by_reconciliation": false,
+  "original_sha256": "820b6c111e37f2673aa071d4216645cce972fef583f6e3ad586d6430df2356c4",
+  "original_bytes_match": true,
+  "cloud_stage": "succeeded",
+  "job_state": "searchable",
+  "stage_history": [
+    {
+      "stage": "validated",
+      "at": "2026-11-24T17:03:43.304910+00:00"
+    },
+    {
+      "stage": "cloud_extracted_or_classified",
+      "at": "2026-11-24T17:03:43.584244+00:00"
+    },
+    {
+      "stage": "cloud_stage_complete",
+      "at": "2026-11-24T17:03:43.708728+00:00"
+    },
+    {
+      "stage": "awaiting_local_embedding",
+      "at": "2026-11-24T17:03:43.823786+00:00"
+    },
+    {
+      "stage": "local_embedding_and_cloud_vector_sync",
+      "at": "2026-11-24T17:03:51.993226+00:00"
+    }
+  ],
+  "cloud_extraction": "approved_plain_text",
+  "retrieval_backend": {
+    "provider": "s3vectors",
+    "aws_calls": 1,
+    "latency_ms": 2860.91,
+    "fallback": false
+  },
+  "semantic_rank": 1,
+  "download_bytes_match": true,
+  "rag": {
+    "mode": "generated",
+    "answer": "Farmers can reduce avoidable water loss by using drip irrigation that delivers water near plant roots. [1]\n\nFarmers can reduce avoidable water loss by watering early in the morning and using mulch to minimize evaporation. [1]",
+    "claims": [
+      {
+        "text": "Farmers can reduce avoidable water loss by using drip irrigation that delivers water near plant roots.",
+        "citations": [
+          1
+        ],
+        "quotes": [
+          "Water conservation on farms combines drip irrigation with soil moisture monitoring."
+        ]
+      },
+      {
+        "text": "Farmers can reduce avoidable water loss by watering early in the morning and using mulch to minimize evaporation.",
+        "citations": [
+          1
+        ],
+        "quotes": [
+          "Farmers can reduce evaporation by watering early in the morning and using mulch."
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "citation": 1,
+        "file_id": "b39aa36d-d2b7-475e-bca0-06739093298c",
+        "chunk_id": 61,
+        "filename": "water-conservation.txt",
+        "original_name": "water-conservation.txt",
+        "section": "Content",
+        "passage": "Water conservation on farms combines drip irrigation with soil moisture monitoring. Drip irrigation delivers water near plant roots. Farmers can reduce evaporation by watering early in the morning and using mulch. Repairing leaks prevents avoidable water loss.",
+        "similarity": 0.6934904456138611,
+        "rrf": 0.03278688524590164
+      }
+    ],
+    "coverage": {
+      "indexed_files": 1,
+      "candidate_chunks": 1,
+      "selected_chunks": 1,
+      "context_characters": 260,
+      "retrieval_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 605.75,
+        "fallback": false
+      }
+    },
+    "question": "How can farmers reduce avoidable water loss?",
+    "retrieval_query": "How can farmers reduce avoidable water loss?",
+    "model": "qwen2.5:3b",
+    "warning": null,
+    "timings": {
+      "retrieval_ms": 669.15,
+      "generation": {
+        "total_duration": 10076892900,
+        "load_duration": 7783723500,
+        "prompt_eval_count": 429,
+        "prompt_eval_duration": 429325000,
+        "eval_count": 138,
+        "eval_duration": 1825073000
+      },
+      "total_ms": 11181.09
+    },
+    "conversation_id": "62602222-bc78-4b1a-9132-2d96b148412b"
+  },
+  "event_processing_paused": true,
+  "finished_at": "2026-11-24T17:04:11.917135+00:00"
+}

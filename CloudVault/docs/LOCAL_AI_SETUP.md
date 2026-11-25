@@ -1,3 +1,14 @@
+# Existing local AI — 3.0 operation
+
+The approved Qwen2.5 3B Q4_K_M and MiniLM are already present. **Do not download models again.** Normal startup is scripts/start.ps1 followed by scripts/warmup.ps1. The runtime stays loopback-only, one model/answer at a time; use scripts/stop-ai.ps1 only to stop the owned process.
+
+Ollama's remote cloud features remain disabled. This does not mean AWS data services are disabled: 3.0 uses private S3/DynamoDB/S3 Vectors and bounded serverless processing. Embedding generation and Qwen inference remain local; full extracted text/conversations remain local except explicitly approved non-sensitive derived fixtures. Hardware/model/license details below remain applicable.
+
+
+---
+
+## Preserved implementation detail
+
 # Local generation setup
 
 The inspected machine has an Intel i5-13420H (12 logical CPUs), 16 GB RAM and an NVIDIA RTX 4050 Laptop GPU with 6,141 MiB VRAM. Initially about 3 GB host RAM, 5,397 MiB GPU memory and 19.9 GB disk were available.

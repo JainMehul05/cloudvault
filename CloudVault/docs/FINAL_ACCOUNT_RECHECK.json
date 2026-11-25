@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-11-25T03:50:53.286896+00:00",
+  "plan": "FREE",
+  "status": "ACTIVE",
+  "credits_usd": 140.0,
+  "expires_at": "2027-05-24 10:27:24.967000+00:00",
+  "queue_mapping": "Disabled",
+  "event_rule": "DISABLED",
+  "mutation_performed": false,
+  "paid_upgrade_performed": false
+}

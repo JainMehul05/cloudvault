@@ -1,3 +1,18 @@
+# 3.0 security boundaries
+
+AWS Free-plan checks fail closed; no upgrade/payment operation exists. The backend alone holds temporary credentials. Every cloud HTTP route requires AWS_IAM and conservative throttling. Original S3 public blocking is preserved; UUID keys and ownership checks protect file operations. No document content, credentials or answer prompts are logged by the worker.
+
+Scoped worker/workflow roles, exact event bucket/prefix, derived-prefix exclusion, ETag checks, finite retries, DLQ and stable execution IDs limit event abuse. Event route/consumer are disabled outside bounded rehearsals. Logs retain three days; no scheduled processing or custom metrics. Only two approved fixture hashes allow plaintext derived cloud artifacts. Vectors/metadata are private but still sensitive representations; do not publish them.
+
+Qwen/MiniLM/full text/history stay local; cloud query metadata is validated against current local chunks. Untrusted evidence cannot invoke tools or expose credentials. Structured exact quote/relevance/numeric checks and one bounded correction reduce unsupported claims; this is not formal entailment proof. Plain-text rendering avoids arbitrary model HTML. Existing filename/path/upload/preview protections remain below.
+
+No public hosting, multi-tenant authorization, independent penetration test, formal WCAG certification or universal prompt-injection guarantee is claimed. Dependency snapshots remain in NPM_AUDIT_V2.json/PYTHON_AUDIT_V2.json; the GPU Torch +cpu/version matching caveat is an audit-tool limitation, not evidence of zero vulnerabilities. No new v3 dependency/model was installed.
+
+
+---
+
+## Preserved implementation detail
+
 # Version 2 security additions
 
 Generation is restricted in configuration to the approved loopback URL/model, with HTTP proxy environment use disabled. Ollama is started on loopback with cloud features disabled. Document passages are untrusted data, never executable tools; the model receives no AWS credentials. Structured output and server-side ID/exact-quote validation reduce fabricated citations. Generated text is escaped React text, not raw HTML. These controls do not prove semantic entailment or eliminate prompt injection.

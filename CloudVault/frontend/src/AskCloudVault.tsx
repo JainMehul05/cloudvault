@@ -44,6 +44,7 @@ export type Answer = {
     indexed_files: number;
     candidate_chunks: number;
     selected_chunks?: number;
+    retrieval_backend?: { provider: string; latency_ms?: number };
   };
   timings: { retrieval_ms: number; total_ms: number };
 };
@@ -416,6 +417,20 @@ export default function AskCloudVault({
                         : "Insufficient evidence"}
                   </span>
                 </div>
+                {turn.response.coverage.retrieval_backend && (
+                  <p className="provider-badge">
+                    {turn.response.coverage.retrieval_backend.provider ===
+                    "s3vectors"
+                      ? "AWS S3 Vectors retrieval"
+                      : turn.response.coverage.retrieval_backend.provider ===
+                          "local_fallback"
+                        ? "Local retrieval fallback"
+                        : "Local retrieval"}
+                    {turn.response.mode === "generated"
+                      ? " · Local Qwen generation"
+                      : ""}
+                  </p>
+                )}
                 {turn.response.warning && (
                   <p className="fallback-notice">{turn.response.warning}</p>
                 )}

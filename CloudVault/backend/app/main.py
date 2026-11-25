@@ -1,4 +1,6 @@
 import hashlib
+import asyncio
+from contextlib import suppress
 import logging
 import mimetypes
 import sqlite3
@@ -11,6 +13,7 @@ from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException, Q
 from fastapi.responses import JSONResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.concurrency import run_in_threadpool
 from botocore.exceptions import BotoCoreError, ClientError
 from pydantic import BaseModel, Field, field_validator
 from .config import settings, ROOT
@@ -20,17 +23,42 @@ from .services import index_file, now, index_lock
 from .embeddings import engine
 from .search import search
 from . import storage
+from . import cloud
+from .cost_guard import FreePlanRequiredError
 from .rag import router as ai_router
+from .analytics import router as analytics_router
 
 
 @asynccontextmanager
 async def lifespan(app):
     initialize()
-    yield
+
+    async def resume_cloud():
+        try:
+            await run_in_threadpool(cloud.flush, 10)
+            await run_in_threadpool(cloud.complete_jobs, 3)
+        except Exception as error:
+            logging.getLogger("cloudvault").warning(
+                "Cloud resume deferred: %s", type(error).__name__
+            )
+
+    task = (
+        asyncio.create_task(resume_cloud())
+        if settings.data_dir.resolve() == (ROOT / "data").resolve()
+        else None
+    )
+    try:
+        yield
+    finally:
+        if task:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
 
 
-app = FastAPI(title="CloudVault", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="CloudVault", version="3.0.0", lifespan=lifespan)
 app.include_router(ai_router)
+app.include_router(analytics_router)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"])
 ALLOWED_ORIGINS = {
     "http://127.0.0.1:8000",
@@ -96,6 +124,16 @@ async def aws_error(request, error):
     )
 
 
+@app.exception_handler(FreePlanRequiredError)
+async def free_plan_required(request, error):
+    return JSONResponse(
+        {
+            "detail": "AWS operations are paused: an active Free plan and more than USD1 eligible credit could not be verified. No paid-plan upgrade or personal spending is permitted. Local indexed search and history remain available."
+        },
+        status_code=503,
+    )
+
+
 @app.exception_handler(sqlite3.Error)
 async def database_error(request, error):
     logging.getLogger("cloudvault").error("Database error: %s", type(error).__name__)
@@ -120,7 +158,7 @@ def require(file_id):
 def health():
     return {
         "status": "ok",
-        "version": "2.0.0",
+        "version": "3.0.0",
         "storage": "aws",
         "model_loaded": engine.model is not None,
     }
@@ -146,7 +184,7 @@ def get_settings():
         "chunk_tokens": 220,
         "overlap_tokens": 32,
         "max_extracted_chars": settings.max_extracted_chars,
-        "version": "2.0.0",
+        "version": "3.0.0",
         "index_location": "Local SQLite; original files are stored in private Amazon S3",
     }
 
@@ -186,6 +224,24 @@ def files(
     starred: bool = False,
     status: str = Query("", max_length=30),
 ):
+    cloud_rows, source = cloud.metadata_rows()
+    if cloud_rows is not None:
+        matching = [
+            r
+            for r in cloud_rows
+            if q.casefold() in r["name"].casefold()
+            and (not extension or r["extension"] == extension)
+            and (not starred or r.get("starred"))
+            and (not status or r["status"] == status)
+        ]
+        matching.sort(key=lambda r: r[sort], reverse=direction == "desc")
+        return {
+            "items": matching[(page - 1) * page_size : page * page_size],
+            "total": len(matching),
+            "page": page,
+            "page_size": page_size,
+            "metadata_source": source,
+        }
     clause = "WHERE instr(lower(name),lower(?))>0 AND (?='' OR extension=?) AND (?=0 OR starred=1) AND (?='' OR status=?)"
     args = (q, extension, extension, int(starred), status, status)
     with connect() as db:
@@ -199,6 +255,7 @@ def files(
         "total": total,
         "page": page,
         "page_size": page_size,
+        "metadata_source": source,
     }
 
 
@@ -241,13 +298,20 @@ def upload(background: BackgroundTasks, file: UploadFile = File(...)):
         raise
     with connect() as db:
         db.execute("UPDATE files SET status='pending' WHERE id=?", (file_id,))
+    cloud.enqueue(file_id)
     background.add_task(index_file, file_id)
     return public_file(require(file_id))
 
 
 @app.get("/api/files/{file_id}")
 def detail(file_id: str):
-    return public_file(require(file_id))
+    local = public_file(require(file_id))
+    return cloud.metadata_detail(file_id) or {
+        **local,
+        "metadata_source": "local_cached_fallback"
+        if cloud.configuration().get("metadata_enabled")
+        else "local",
+    }
 
 
 @app.get("/api/files/{file_id}/download")
@@ -328,7 +392,15 @@ def rename(file_id: str, payload: Rename):
                 "UPDATE files SET name=?,updated_at=? WHERE id=?", (payload.name, now(), file_id)
             )
         if payload.starred is not None:
-            db.execute("UPDATE files SET starred=? WHERE id=?", (int(payload.starred), file_id))
+            db.execute(
+                "UPDATE files SET starred=?,updated_at=? WHERE id=?",
+                (int(payload.starred), now(), file_id),
+            )
+    cloud.enqueue(file_id)
+    try:
+        cloud.flush()
+    except Exception:
+        pass  # Durable outbox retains the local edit for bounded reconciliation.
     return public_file(require(file_id))
 
 
@@ -341,8 +413,13 @@ def remove(file_id: str, confirm: bool = False):
         if not record["owned"]:
             raise HTTPException(403, "Imported original objects are protected from deletion")
         storage.delete(record["object_key"])
+        cloud.enqueue(file_id, tombstone=True)
         with connect() as db:
             db.execute("DELETE FROM files WHERE id=?", (file_id,))
+        try:
+            cloud.flush()
+        except Exception:
+            pass
     return {"deleted": file_id}
 
 
@@ -355,6 +432,7 @@ def reindex(file_id: str, background: BackgroundTasks):
         raise HTTPException(409, "Upload failed; upload the original file again")
     with connect() as db:
         db.execute("UPDATE files SET status='pending', error=NULL WHERE id=?", (file_id,))
+    cloud.enqueue(file_id)
     background.add_task(index_file, file_id)
     return {"status": "pending"}
 
@@ -440,4 +518,23 @@ if DIST.exists():
 
     @app.get("/")
     def homepage():
+        return FileResponse(DIST / "index.html")
+
+    @app.get("/workspace")
+    @app.get("/workspace/{page:path}")
+    def workspace_page(page: str = ""):
+        page = page.rstrip("/")
+        if page and page not in {
+            "files",
+            "starred",
+            "recent",
+            "upload",
+            "search",
+            "ask",
+            "cloud",
+            "settings",
+            "about",
+            "help",
+        }:
+            raise HTTPException(404, "Workspace page not found")
         return FileResponse(DIST / "index.html")

@@ -62,6 +62,14 @@ def validate_claims(answer, sources):
         if not claim.sources or len(claim.sources) != len(claim.quotes):
             continue
         valid = True
+        numbers = set(re.findall(r"\d+(?:\.\d+)?", claim.text))
+        quoted_numbers = set(re.findall(r"\d+(?:\.\d+)?", " ".join(claim.quotes)))
+        if not numbers.issubset(quoted_numbers):
+            valid = False
+        if re.search(r"\brespectively\b", claim.text, re.I) and not any(
+            re.search(r"\brespectively\b", quote, re.I) for quote in claim.quotes
+        ):
+            valid = False
         for identifier, quote in zip(claim.sources, claim.quotes):
             source = available.get(identifier)
             if (
@@ -70,6 +78,15 @@ def validate_claims(answer, sources):
                 or normalize_quote(quote) not in normalize_quote(source["passage"])
                 or not (set(terms(claim.text)) & set(terms(quote)))
             ):
+                valid = False
+                break
+            # Embedding similarity alone can accept plausible outside knowledge.
+            # Require most content words to be anchored in the exact quotation.
+            # This is deliberately conservative; a rejected paraphrase gets one
+            # correction opportunity, then the explicit extractive fallback.
+            content = set(terms(claim.text))
+            anchored = content & set(terms(quote))
+            if content and len(anchored) / len(content) < 0.6:
                 valid = False
                 break
         # A relevant quotation is required as well as a genuine one. This catches
@@ -117,6 +134,15 @@ def history_context(conversation_id):
     return dict(conversation), previous
 
 
+async def wait_for_generation(task, request, request_id):
+    while not task.done():
+        await asyncio.sleep(0.2)
+        if request_id in cancelled_requests or await request.is_disconnected():
+            task.cancel()
+            raise HTTPException(499, "Answer preparation interrupted")
+    return await task
+
+
 @router.post("/ask")
 async def ask(payload: Ask, request: Request):
     if generation_lock.locked():
@@ -141,8 +167,8 @@ async def ask(payload: Ask, request: Request):
         # Follow-ups re-retrieve using prior USER questions, never prior generated factual claims.
         retrieval_query = question
         if previous and (
-            len(question.split()) < 12
-            or re.search(r"\b(it|its|they|their|that|those|what about)\b", question, re.I)
+            len(terms(question)) < 3
+            or re.search(r"\b(it|its|they|their|that|those)\b", question, re.I)
         ):
             retrieval_query = (
                 "Follow-up: "
@@ -180,23 +206,33 @@ async def ask(payload: Ask, request: Request):
                 if diagnostic["available"]:
                     task = asyncio.create_task(llm.generate(retrieval_query, sources))
                     try:
-                        while not task.done():
-                            await asyncio.sleep(0.2)
-                            if (
-                                payload.request_id in cancelled_requests
-                                or await request.is_disconnected()
-                            ):
-                                task.cancel()
-                                raise HTTPException(499, "Answer preparation interrupted")
-                        generated, timing = await task
+                        generated, timing = await wait_for_generation(
+                            task, request, payload.request_id
+                        )
                         claims = await run_in_threadpool(validate_claims, generated, sources)
+                        if not generated.insufficient and (
+                            not claims or len(claims) != len(generated.claims)
+                        ):
+                            result["timings"]["initial_generation"] = timing
+                            result["timings"]["correction_attempted"] = True
+                            correction = (
+                                retrieval_query
+                                + "\nCitation correction: Produce fewer strictly supported claims. Each claim must cite exactly one supplied source and copy one short exact relevant quote. Do not add numbers absent from that quotation. Answer the original question; abstain if evidence is insufficient."
+                            )
+                            task = asyncio.create_task(
+                                asyncio.wait_for(llm.generate(correction, sources), timeout=30)
+                            )
+                            generated, timing = await wait_for_generation(
+                                task, request, payload.request_id
+                            )
+                            claims = await run_in_threadpool(validate_claims, generated, sources)
                         if generated.insufficient:
                             result.update(
                                 mode="insufficient",
                                 answer="The retrieved passages do not provide enough evidence to answer this question.",
                                 claims=[],
                             )
-                        elif claims and len(claims) == len(generated.claims):
+                        elif claims:
                             used = {key for claim in claims for key in claim["citations"]}
                             result.update(
                                 mode="generated",
@@ -208,6 +244,10 @@ async def ask(payload: Ask, request: Request):
                                 sources=[s for s in sources if s["citation"] in used],
                                 model=llm.settings.llm_model,
                             )
+                            if len(claims) != len(generated.claims):
+                                result["warning"] = (
+                                    "Only statements that passed source verification are shown; some generated details were omitted."
+                                )
                         else:
                             result["warning"] = (
                                 "Generated claims did not pass citation/quotation validation. Showing source excerpts instead."

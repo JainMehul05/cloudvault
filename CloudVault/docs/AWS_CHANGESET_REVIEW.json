@@ -1,0 +1,26 @@
+{
+  "reviewed_at": "2026-11-24T16:54:38.254790+00:00",
+  "changes": [
+    {
+      "action": "Modify",
+      "logical_id": "ApiIntegration",
+      "type": "AWS::ApiGatewayV2::Integration"
+    },
+    {
+      "action": "Modify",
+      "logical_id": "DocumentWorkflow",
+      "type": "AWS::StepFunctions::StateMachine"
+    },
+    {
+      "action": "Modify",
+      "logical_id": "WorkerFunction",
+      "type": "AWS::Lambda::Function"
+    },
+    {
+      "action": "Modify",
+      "logical_id": "WorkflowRole",
+      "type": "AWS::IAM::Role"
+    }
+  ],
+  "within_approved_manifest": true
+}

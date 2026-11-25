@@ -1,0 +1,7 @@
+[
+  {"query":"How can readable information be kept confidential using cryptographic keys?","expected":"encryption.txt"},
+  {"query":"How do firewalls and multifactor authentication reduce intrusions?","expected":"network-security.txt"},
+  {"query":"How can farms avoid wasting water?","expected":"water-conservation.txt"},
+  {"query":"How are RAM and ROM chips combined to create a larger memory unit?","expected":"Memory Organization.pptx.pdf"},
+  {"query":"Where do MiniLM embeddings and Qwen generation run in the cloud-stage architecture?","expected":"cloud-stage-canary.txt"}
+]

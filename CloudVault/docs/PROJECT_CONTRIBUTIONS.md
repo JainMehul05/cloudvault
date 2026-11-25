@@ -1,3 +1,14 @@
+# 3.0 contribution boundary
+
+Preserved: upstream source/license/notice, existing S3 originals, v1/v2 checkpoints, file/search workflows, local vectors, MiniLM/Qwen caches and conversations. Implemented here: cloud vector/metadata adapters and migration; conditional outbox; eligible bounded serverless stack and workflow; scoped IAM HTTP API/SSM; actual metrics/job evidence; Free-plan guard; real landing/URL routing/charts/cloud interface; stronger citation checks; expanded retrieval/failure/preservation verification; current handover and lab documentation.
+
+Do not claim ownership of AWS, React, FastAPI, MiniLM, Qwen, Ollama or the upstream project. No invented user/customer data, unsupported benchmark or fake cloud success is used. Original files outside CloudVault remain unchanged against the baseline.
+
+
+---
+
+## Preserved implementation detail
+
 # Version 2 contributions and attribution
 
 CloudVault 2.0 adds the original Workspace/Explorer/assistant UI and CSS design system, self-hosted Inter (license retained), additive schema migration/FTS, cached hybrid retrieval, local Ollama integration, citation checks, follow-up scope/history, safe raster previews, owned runtime scripts and additional tests/evidence. Lucide and the existing React/FastAPI/SQLite/Boto3/MiniLM dependencies retain their upstream licenses.

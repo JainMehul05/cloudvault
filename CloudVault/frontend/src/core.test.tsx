@@ -3,6 +3,24 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Badge, Highlight } from "./components";
 import { api, bytes } from "./api";
 import { readPreference } from "./preferences";
+import Landing from "./Landing";
+import { pageForPath } from "./routes";
+
+describe("product entry and routing", () => {
+  it("provides real workspace entries and clearly identifies the captured product image", () => {
+    const html = renderToStaticMarkup(<Landing />);
+    expect(html).toContain('href="/workspace"');
+    expect(html).toContain('href="/workspace/ask"');
+    expect(html).toContain('href="#how-it-works"');
+    expect(html).toContain("this image is not a live answer");
+    expect(html).not.toContain("customer reviews");
+  });
+  it("resolves direct workspace links and trailing slashes", () => {
+    expect(pageForPath("/workspace/ask")).toBe("Ask CloudVault");
+    expect(pageForPath("/workspace/cloud/")).toBe("Cloud Infrastructure");
+    expect(pageForPath("/workspace/starred")).toBe("Starred");
+  });
+});
 describe("resilient local preferences", () => {
   afterEach(() => vi.unstubAllGlobals());
   it("recovers from unavailable browser storage", () => {

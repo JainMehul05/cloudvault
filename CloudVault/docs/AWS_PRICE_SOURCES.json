@@ -1,0 +1,45 @@
+{
+  "region": "ap-southeast-2",
+  "sources": [
+    {
+      "service": "AmazonS3",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-21T17:29:19Z"
+    },
+    {
+      "service": "AmazonDynamoDB",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonDynamoDB/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-11T15:36:12Z"
+    },
+    {
+      "service": "AWSLambda",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-20T20:36:47Z"
+    },
+    {
+      "service": "AWSQueueService",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSQueueService/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-11T15:35:51Z"
+    },
+    {
+      "service": "AmazonStates",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonStates/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-04T21:34:23Z"
+    },
+    {
+      "service": "AWSEvents",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSEvents/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-18T21:44:01Z"
+    },
+    {
+      "service": "AmazonCloudWatch",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-24T14:53:03Z"
+    },
+    {
+      "service": "AmazonApiGateway",
+      "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonApiGateway/current/ap-southeast-2/index.json",
+      "publicationDate": "2026-11-23T17:45:59Z"
+    }
+  ]
+}

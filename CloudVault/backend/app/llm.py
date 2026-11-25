@@ -34,7 +34,8 @@ Never infer provider responsibilities, guarantees or mechanisms that the passage
 Use multiple files when they contribute; do not force unrelated sources. Explain disagreements
 with citations to both sides. Do not invent filenames, numbers, quotes or facts. If evidence
 does not answer the question, return insufficient=true and claims=[]. No general-knowledge answer.
-Source IDs must come from evidence. Do not put citation markers or URLs in text; the server adds them."""
+Source IDs must come from evidence. Do not put citation markers or URLs in text; the server adds them.
+Keep each claim to one factual mechanism or relationship. Its quotation must support EVERY part of that claim. Preserve who does what and what risk is reduced. Omit unsupported elaboration. Answer the CURRENT question; previous questions only resolve missing context."""
 
 
 async def status():

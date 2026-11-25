@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-11-24T17:08:10.759259+00:00",
+  "window_minutes": 30,
+  "native_lambda_metrics": {
+    "Invocations": {
+      "datapoints": [
+        {
+          "Timestamp": "2026-11-24T22:33:00+05:30",
+          "Sum": 5.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-11-24T22:08:00+05:30",
+          "Sum": 2.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-11-24T22:18:00+05:30",
+          "Sum": 1.0,
+          "Unit": "Count"
+        }
+      ],
+      "statistic": "Sum"
+    },
+    "Errors": {
+      "datapoints": [
+        {
+          "Timestamp": "2026-11-24T22:33:00+05:30",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-11-24T22:08:00+05:30",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-11-24T22:18:00+05:30",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ],
+      "statistic": "Sum"
+    },
+    "Duration": {
+      "datapoints": [
+        {
+          "Timestamp": "2026-11-24T22:33:00+05:30",
+          "Average": 95.61399999999999,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-11-24T22:18:00+05:30",
+          "Average": 218.4,
+          "Unit": "Milliseconds"
+        },
+        {
+          "Timestamp": "2026-11-24T22:08:00+05:30",
+          "Average": 68.44500000000001,
+          "Unit": "Milliseconds"
+        }
+      ],
+      "statistic": "Average"
+    }
+  },
+  "safe_structured_log_events": [
+    {
+      "timestamp": 1795538945736,
+      "correlation_id": "dispatch",
+      "stage": "dispatch_or_api",
+      "duration_ms": 216.3,
+      "request_id": "13644921-3a2f-4828-bda6-fdb00fa0d9f1"
+    },
+    {
+      "timestamp": 1795539823094,
+      "correlation_id": "dispatch",
+      "stage": "dispatch_or_api",
+      "duration_ms": 171.86,
+      "request_id": "7572932e-dd39-52e3-86c1-f051189f2eb2"
+    },
+    {
+      "timestamp": 1795539823389,
+      "correlation_id": "cv-9c0e2410b2e6a18bf735818d290e2761931e1ffeb8dfe23fa12339c9c54a",
+      "stage": "validate",
+      "duration_ms": 186.77,
+      "request_id": "40eb7b9b-4964-492e-a73b-5306db56d20f"
+    },
+    {
+      "timestamp": 1795539823597,
+      "correlation_id": "cv-9c0e2410b2e6a18bf735818d290e2761931e1ffeb8dfe23fa12339c9c54a",
+      "stage": "extract",
+      "duration_ms": 89.54,
+      "request_id": "f5606973-a51d-44b6-8209-c2720bf7499b"
+    },
+    {
+      "timestamp": 1795539823714,
+      "correlation_id": "cv-9c0e2410b2e6a18bf735818d290e2761931e1ffeb8dfe23fa12339c9c54a",
+      "stage": "persist",
+      "duration_ms": 5.46,
+      "request_id": "4e55acbf-4b77-498d-870a-a73cc0b399df"
+    },
+    {
+      "timestamp": 1795539823828,
+      "correlation_id": "cv-9c0e2410b2e6a18bf735818d290e2761931e1ffeb8dfe23fa12339c9c54a",
+      "stage": "await_embedding",
+      "duration_ms": 4.8,
+      "request_id": "e38acdbb-9713-48ce-b4eb-e965fc342f94"
+    }
+  ],
+  "metric_delay_note": "No datapoints means not yet available, not zero usage."
+}

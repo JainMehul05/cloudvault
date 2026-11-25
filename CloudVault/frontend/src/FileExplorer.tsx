@@ -23,6 +23,7 @@ export default function FileExplorer({
   recent,
   recentMode = false,
   initialStatus = "",
+  initialStarred = false,
   types = [],
   onAsk,
   onError,
@@ -32,6 +33,7 @@ export default function FileExplorer({
   recent?: FileRecord[];
   recentMode?: boolean;
   initialStatus?: string;
+  initialStarred?: boolean;
   types?: string[];
   onAsk?: (ids: string[]) => void;
   onError: (s: string) => void;
@@ -39,12 +41,13 @@ export default function FileExplorer({
   onRefresh: () => Promise<void>;
 }) {
   const [files, setFiles] = useState<FileRecord[]>([]),
+    [metadataSource, setMetadataSource] = useState(""),
     [total, setTotal] = useState(0),
     [page, setPage] = useState(1),
     [q, setQ] = useState(""),
     [ext, setExt] = useState(""),
     [status, setStatus] = useState(initialStatus),
-    [starred, setStarred] = useState(false),
+    [starred, setStarred] = useState(initialStarred),
     [sort, setSort] = useState("created_at"),
     [dir, setDir] = useState("desc"),
     [selected, setSelected] = useState<string[]>([]),
@@ -68,7 +71,11 @@ export default function FileExplorer({
     request.current = controller;
     setLoading(true);
     try {
-      const data = await api<{ items: FileRecord[]; total: number }>(
+      const data = await api<{
+        items: FileRecord[];
+        total: number;
+        metadata_source?: string;
+      }>(
         "/files?" +
           new URLSearchParams({
             q,
@@ -83,6 +90,7 @@ export default function FileExplorer({
       );
       setFiles(data.items);
       setTotal(data.total);
+      setMetadataSource(data.metadata_source || "local");
     } catch (e) {
       if (!controller.signal.aborted) onError((e as Error).message);
     } finally {
@@ -575,6 +583,19 @@ export default function FileExplorer({
         <div className="pagination">
           <span>
             {total} files · Page {page} of {Math.max(1, Math.ceil(total / 20))}
+            {metadataSource && (
+              <span className="provider-badge">
+                {metadataSource.includes("pending")
+                  ? "Pending cloud sync"
+                  : metadataSource.includes("iam_api")
+                    ? "Cloud metadata · IAM API"
+                    : metadataSource.startsWith("dynamodb")
+                      ? "Cloud metadata · DynamoDB"
+                      : metadataSource.includes("fallback")
+                        ? "Cached local metadata"
+                        : "Local metadata"}
+              </span>
+            )}
           </span>
           <div>
             <button

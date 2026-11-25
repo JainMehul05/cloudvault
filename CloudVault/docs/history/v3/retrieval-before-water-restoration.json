@@ -1,0 +1,181 @@
+{
+  "cases": [
+    {
+      "query": "Where can I store my digital files remotely?",
+      "expected": "object-storage.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 5107.3,
+        "fallback": false
+      },
+      "request_ms": 60833.61,
+      "cloud_results": [
+        "object-storage.txt",
+        "cloud-stage-canary.txt",
+        "Memory Organization.pptx.pdf"
+      ]
+    },
+    {
+      "query": "How can I protect information from hackers?",
+      "expected": "network-security.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 474.85,
+        "fallback": false
+      },
+      "request_ms": 586.48,
+      "cloud_results": [
+        "network-security.txt",
+        "encryption.txt"
+      ]
+    },
+    {
+      "query": "How do computers learn from examples?",
+      "expected": "machine-learning.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 744.36,
+        "fallback": false
+      },
+      "request_ms": 856.97,
+      "cloud_results": [
+        "machine-learning.txt",
+        "Memory Organization.pptx.pdf"
+      ]
+    },
+    {
+      "query": "How can structured information be stored and retrieved?",
+      "expected": "databases.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 431.13,
+        "fallback": false
+      },
+      "request_ms": 624.93,
+      "cloud_results": [
+        "databases.txt",
+        "Memory Organization.pptx.pdf",
+        "machine-learning.txt",
+        "encryption.txt"
+      ]
+    },
+    {
+      "query": "Which documents discuss environmentally friendly energy?",
+      "expected": "renewable-energy.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 610.77,
+        "fallback": false
+      },
+      "request_ms": 742.13,
+      "cloud_results": [
+        "renewable-energy.txt"
+      ]
+    },
+    {
+      "query": "How can readable information be kept confidential using cryptographic keys?",
+      "expected": "encryption.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 659.61,
+        "fallback": false
+      },
+      "request_ms": 776.35,
+      "cloud_results": [
+        "encryption.txt",
+        "Memory Organization.pptx.pdf"
+      ]
+    },
+    {
+      "query": "How do firewalls and multifactor authentication reduce intrusions?",
+      "expected": "network-security.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 629.11,
+        "fallback": false
+      },
+      "request_ms": 851.87,
+      "cloud_results": [
+        "network-security.txt"
+      ]
+    },
+    {
+      "query": "How can farms avoid wasting water?",
+      "expected": "water-conservation.txt",
+      "cloud_rank": null,
+      "local_rank": null,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 678.03,
+        "fallback": false
+      },
+      "request_ms": 991.56,
+      "cloud_results": [
+        "renewable-energy.txt"
+      ]
+    },
+    {
+      "query": "How are RAM and ROM chips combined to create a larger memory unit?",
+      "expected": "Memory Organization.pptx.pdf",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 632.93,
+        "fallback": false
+      },
+      "request_ms": 816.99,
+      "cloud_results": [
+        "Memory Organization.pptx.pdf"
+      ]
+    },
+    {
+      "query": "Where do MiniLM embeddings and Qwen generation run in the cloud-stage architecture?",
+      "expected": "cloud-stage-canary.txt",
+      "cloud_rank": 1,
+      "local_rank": 1,
+      "cloud_backend": {
+        "provider": "s3vectors",
+        "aws_calls": 1,
+        "latency_ms": 682.4,
+        "fallback": false
+      },
+      "request_ms": 962.25,
+      "cloud_results": [
+        "cloud-stage-canary.txt",
+        "object-storage.txt",
+        "Memory Organization.pptx.pdf",
+        "cloud-computing.txt"
+      ]
+    }
+  ],
+  "sample_size": 10,
+  "cloud_top1": 0.9,
+  "cloud_recall_at5": 0.9,
+  "cloud_mrr_at5": 0.9,
+  "local_top1": 0.9,
+  "note": "Small curated academic set; not a general accuracy claim. Local rankings computed from the same stored normalized vectors."
+}

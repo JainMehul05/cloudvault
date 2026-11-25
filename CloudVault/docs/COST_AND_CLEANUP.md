@@ -1,17 +1,17 @@
-# Cost control and safe cleanup
+# Cost controls and selective cleanup
 
-Only the existing Sydney S3 bucket is used. No AWS account upgrade, paid AI API, extra bucket, vector index, Lambda, EC2, RDS, OpenSearch, NAT gateway or CloudFormation stack was created. Local inference has no per-query API charge; it uses laptop CPU, RAM, disk and electricity.
+The user authorizes ₹0 out-of-pocket only. No Paid-plan upgrade, paid AI service or auto-upgrading feature is permitted. Read AWS_COST_ESTIMATE.md for the actual account check, regional price sources and the distinction between estimated credit consumption and a delayed bill.
 
-S3 PUT/GET/HEAD/LIST operations, bytes stored and data transfer may consume credits or incur charges under your account's actual terms. No claim is made that AWS is permanently free, that the reported initial $100 credit is still available, or that the precise current bill was verified. Check the AWS Billing console. Avoid large files, frequent polling of AWS diagnostics, or repeated bulk integration runs.
+At handover the EventBridge rule and SQS consumer are disabled, confirmed by read-only AWS calls. IAM metadata API, existing storage and on-demand vector queries remain usable. Retained originals, table, vectors, logs and other resources can still consume eligible credits; pausing is not deletion and not a zero-usage guarantee.
 
-Eight non-sensitive demo objects (2,309 bytes total) were created by website uploads. Their exact UUID keys and SHA256 hashes are in LIVE_VERIFICATION.json. They are intentionally retained for evaluation. The original cloudvault-test.txt and unrelated objects were not deleted. Unit tests use isolated in-memory storage, not S3, for destructive cases.
+Preview the exact owned-resource cleanup inventory locally:
 
-## Stop and retain
+```powershell
+backend/.venv/Scripts/python.exe scripts/cleanup-preview.py
+```
 
-Run `scripts/stop.ps1` to stop the owned service only. This preserves SQLite and cloud originals. Keep the model cache and database for fast startup and persistent search.
+This script makes no AWS calls and has no destructive apply option. Actual teardown requires a separate explicit approval. The approved implementation never authorized deletion of originals or unrelated resources.
 
-## Selective cleanup after evaluation
+Recommended teardown order after exporting evidence and data: verify consumers paused; export DynamoDB and online SQLite backup; inspect current CloudFormation resources/Retain policies; remove only owned stack compute/API/queues/roles/parameters; review retained logs; retain external metadata/vector data unless separately approved. Compare saved pre-v3 bucket notifications with current settings before any restoration, preserving unrelated later changes.
 
-Review the explicit manifest first. If you decide to remove a CloudVault-owned demo file, use My Files → Actions → Delete, inspect the irreversible-delete dialog, then confirm yourself. This deletes the specified original and cascades local index rows. Never run recursive bucket deletion or delete the bucket. Imported cloudvault-test.txt is protected by the API. In versioned buckets a delete may leave old versions; lifecycle cleanup requires separate review and authorization.
-
-Run the read-only Settings reconciliation to see unmatched keys. It never mutates objects. Do not automatically delete or import unfamiliar keys. Local dependency folders and model caches may be removed manually after taking a private database backup, but setup will need internet to recreate them.
+Never delete the original bucket, upload prefix, local database/backups/models or unrelated account resources as a shortcut. Synthetic DLQ and negative-test job evidence is retained. No teardown has been executed. Local stop scripts verify process ownership and preserve data.

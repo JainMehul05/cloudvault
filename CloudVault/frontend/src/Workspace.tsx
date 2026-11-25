@@ -24,10 +24,11 @@ import {
   AlertCircle,
   CheckCircle2,
   ChevronRight,
+  Star,
+  Network,
 } from "lucide-react";
 import {
   api,
-  bytes,
   type Stats,
   type AWS,
   type Settings,
@@ -40,26 +41,22 @@ import Upload from "./Upload";
 import SmartSearch from "./SmartSearch";
 import DocumentPreview from "./DocumentPreview";
 import LocalAIStatus from "./LocalAIStatus";
+import { pageForPath, navigatePage, type Page } from "./routes";
+import { useTheme } from "./theme";
+import DashboardAnalytics from "./DashboardAnalytics";
+import CloudInfrastructure from "./CloudInfrastructure";
 const AskCloudVault = lazy(() => import("./AskCloudVault"));
-type Page =
-  | "Overview"
-  | "My Files"
-  | "Recent"
-  | "Upload"
-  | "Smart Search"
-  | "Ask CloudVault"
-  | "Settings"
-  | "About Project"
-  | "Help and shortcuts";
 const primary = [
   { name: "Overview", icon: LayoutDashboard },
   { name: "My Files", icon: Files },
+  { name: "Starred", icon: Star },
   { name: "Recent", icon: Clock },
   { name: "Upload", icon: UploadCloud },
   { name: "Smart Search", icon: Search },
   { name: "Ask CloudVault", icon: MessageSquare },
 ] as const;
 const secondary = [
+  { name: "Cloud Infrastructure", icon: Network },
   { name: "Settings", icon: SettingsIcon },
   { name: "About Project", icon: Info },
   { name: "Help and shortcuts", icon: HelpCircle },
@@ -68,6 +65,9 @@ const descriptions: Record<Page, string> = {
   Overview: "Your files, their contents, and the connections between them.",
   "My Files": "Manage your private cloud collection.",
   Recent: "Your most recently uploaded files.",
+  Starred: "The files you want to keep close.",
+  "Cloud Infrastructure":
+    "Actual cloud services, local intelligence and the path between them.",
   Upload: "Private storage. Searchable knowledge.",
   "Smart Search": "Find a filename, an exact phrase, or an idea.",
   "Ask CloudVault":
@@ -77,13 +77,13 @@ const descriptions: Record<Page, string> = {
   "Help and shortcuts": "A few useful ways to move faster.",
 };
 export default function Workspace() {
-  const [page, setPage] = useState<Page>("Overview"),
+  const [page, setPage] = useState<Page>(() => pageForPath(location.pathname)),
     [mobile, setMobile] = useState(false),
-    [collapsed, setCollapsed] = usePreference("sidebarCollapsed", false),
-    [theme, setTheme] = usePreference<"light" | "dark" | "system">(
-      "theme",
-      "system",
-    );
+    [collapsed, setCollapsed] = usePreference("sidebarCollapsed", false);
+  const [theme, setTheme] = useTheme();
+  useEffect(() => {
+    document.title = page + " · CloudVault 3.0";
+  }, [page]);
   const [stats, setStats] = useState<Stats | null>(null),
     [aws, setAws] = useState<AWS | null>(null),
     [settings, setSettings] = useState<Settings | null>(null),
@@ -101,10 +101,20 @@ export default function Workspace() {
   const go = useCallback((next: Page) => {
     setFileStatus("");
     setPage(next);
+    navigatePage(next);
     setMobile(false);
     setCommand(false);
     setError("");
     window.scrollTo({ top: 0 });
+  }, []);
+  useEffect(() => {
+    const update = () => setPage(pageForPath(location.pathname));
+    window.addEventListener("popstate", update);
+    window.addEventListener("cloudvault:navigate", update);
+    return () => {
+      window.removeEventListener("popstate", update);
+      window.removeEventListener("cloudvault:navigate", update);
+    };
   }, []);
   const askFiles = (ids: string[]) => {
     setScope(ids);
@@ -145,16 +155,6 @@ export default function Workspace() {
     const timer = setTimeout(() => void refresh(), 2500);
     return () => clearTimeout(timer);
   }, [stats, refresh]);
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => {
-      document.documentElement.dataset.theme =
-        theme === "system" ? (media.matches ? "dark" : "light") : theme;
-    };
-    apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, [theme]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -258,7 +258,7 @@ export default function Workspace() {
           <div className="workspace-person">
             <span className="avatar">CV</span>
             <div>
-              Personal workspace<small>CloudVault 2.0</small>
+              Personal workspace<small>CloudVault 3.0</small>
             </div>
             <button
               className="icon-button collapse-button"
@@ -337,11 +337,7 @@ export default function Workspace() {
                 CLOUDVAULT /{" "}
                 {page === "Overview" ? "WORKSPACE" : page.toUpperCase()}
               </div>
-              <h1>
-                {page === "Overview"
-                  ? "A place for every file. Context for every question."
-                  : page}
-              </h1>
+              <h1>{page === "Overview" ? "Your workspace." : page}</h1>
               <p>{descriptions[page]}</p>
             </div>
             {page !== "Upload" && (
@@ -379,87 +375,7 @@ export default function Workspace() {
           )}
           {page === "Overview" && (
             <>
-              <div className="overview-top">
-                <section className="knowledge-entry">
-                  <div className="entry-label">
-                    <span className="mini-emblem">
-                      <Layers size={16} />
-                    </span>
-                    YOUR KNOWLEDGE, CONNECTED
-                  </div>
-                  <h2>
-                    The answer is already
-                    <br />
-                    in your files.
-                  </h2>
-                  <p>
-                    Bring together the details. Ask across your documents and
-                    trace every answer to its source.
-                  </p>
-                  <button className="ask-entry" onClick={() => askFiles([])}>
-                    <MessageSquare size={18} />
-                    <span>What would you like to understand?</span>
-                    <kbd>Ask AI</kbd>
-                  </button>
-                  <div className="entry-foot">
-                    <ShieldCheck size={13} />
-                    Private inference on this computer<span>·</span>Originals in
-                    Amazon S3
-                  </div>
-                </section>
-                <section className="collection-summary">
-                  <div className="section-head">
-                    <h2>Your collection</h2>
-                    <span className="caption">LIVE WORKSPACE DATA</span>
-                  </div>
-                  <div className="overview-metrics">
-                    {[
-                      {
-                        label: "Stored files",
-                        value: stats?.total_files,
-                        note: "Originals in S3",
-                        target: "My Files",
-                      },
-                      {
-                        label: "Cloud storage",
-                        value: stats ? bytes(stats.total_bytes) : undefined,
-                        note: "Managed collection",
-                        target: "My Files",
-                      },
-                      {
-                        label: "Searchable files",
-                        value: stats ? stats.statuses.indexed || 0 : undefined,
-                        note: stats
-                          ? stats.chunks + " indexed passages"
-                          : "Loading index",
-                        target: "Smart Search",
-                      },
-                      {
-                        label: "Needs attention",
-                        value: stats
-                          ? (stats.statuses.failed || 0) +
-                            (stats.statuses.upload_failed || 0)
-                          : undefined,
-                        note: stats
-                          ? (stats.statuses.pending || 0) +
-                            (stats.statuses.processing || 0) +
-                            " processing"
-                          : "Loading status",
-                        target: "My Files",
-                      },
-                    ].map((s) => (
-                      <button
-                        key={s.label}
-                        onClick={() => go(s.target as Page)}
-                      >
-                        <span>{s.label}</span>
-                        <strong>{s.value ?? "—"}</strong>
-                        <small>{s.note}</small>
-                      </button>
-                    ))}
-                  </div>
-                </section>
-              </div>
+              <DashboardAnalytics />
               <div className="quick-links">
                 {[
                   {
@@ -586,11 +502,13 @@ export default function Workspace() {
               </div>
             </>
           )}
-          {(page === "My Files" || page === "Recent") && (
+          {page === "Cloud Infrastructure" && <CloudInfrastructure />}
+          {(page === "My Files" || page === "Recent" || page === "Starred") && (
             <section className="panel explorer-panel">
               <FileManager
                 key={page + fileStatus}
                 initialStatus={page === "My Files" ? fileStatus : ""}
+                initialStarred={page === "Starred"}
                 recentMode={page === "Recent"}
                 types={types}
                 onAsk={askFiles}
@@ -666,7 +584,7 @@ export default function Workspace() {
                 </dl>
                 <p className="caption">
                   Temporary AWS credentials stay on the backend. No public URLs
-                  or additional AWS infrastructure.
+                  or browser access to AWS credentials.
                 </p>
                 <button
                   className="secondary"
@@ -700,7 +618,7 @@ export default function Workspace() {
                   <dt>Chunk / overlap</dt>
                   <dd>220 / 32 tokens</dd>
                   <dt>Persistence</dt>
-                  <dd>Local SQLite + private model cache</dd>
+                  <dd>DynamoDB + local SQLite and model cache</dd>
                 </dl>
                 <p className="caption">
                   Generation is separate from embeddings. The assistant shows
@@ -757,14 +675,14 @@ export default function Workspace() {
                 <span className="logo large">
                   <Cloud size={35} />
                 </span>
-                <div className="eyebrow">CLOUDVAULT 2.0</div>
+                <div className="eyebrow">CLOUDVAULT 3.0</div>
                 <h2>
                   Store intelligently.
                   <br />
                   Understand effortlessly.
                 </h2>
                 <p>
-                  Private AWS file storage with local semantic search and
+                  Private AWS file storage with cloud semantic retrieval and
                   document-grounded answers.
                 </p>
               </section>
@@ -783,8 +701,9 @@ export default function Workspace() {
                 <section className="panel">
                   <h2>Clear boundaries</h2>
                   <p>
-                    Single-user localhost operation. No paid AI API, additional
-                    AWS service, public sharing or unrestricted model tools.
+                    Single-user localhost workspace with verified AWS data
+                    services. No paid AI API, public file sharing or
+                    unrestricted model tools.
                   </p>
                   <p>
                     Scanned documents require OCR, which is not implemented.
@@ -853,7 +772,7 @@ export default function Workspace() {
               <ShieldCheck size={13} />
               Private storage · Local intelligence
             </span>
-            <span>CloudVault 2.0</span>
+            <span>CloudVault 3.0</span>
             <button className="text-button" onClick={() => void refresh()}>
               Refresh workspace
             </button>

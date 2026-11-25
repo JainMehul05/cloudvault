@@ -1,3 +1,25 @@
+# Additional 3.0 endpoints
+
+The authoritative schema is live at /docs. All local routes below are under /api.
+
+| Endpoint | Purpose |
+|---|---|
+| GET /analytics?days=7 or 30 | Actual local file bytes/types/activity/index counts |
+| GET /cloud/status | Sanitized provider/service evidence, native metrics snapshot, paused processing and Free-plan guard |
+| GET /cloud/jobs | Real bounded DynamoDB job records and history |
+| POST /cloud/reconcile | Bounded outbox/job completion; no continuous polling |
+| POST /ai/cancel | Cooperative cancellation by request_id |
+| GET /files | Cloud metadata with local pending overlay and explicit source |
+
+GET /search and POST /ai/ask now include actual retrieval_backend diagnostics. Free-plan guard failures return explicit fallback or S3 unavailable (503). Existing file/preview/download/search/AI route contracts remain.
+
+Separate cloud HTTP API routes GET /files, /jobs, /status require AWS_IAM. The backend uses SigV4; the browser never receives AWS credentials or signs requests. The endpoint is publicly routable but unauthorized requests return403; throttle1rps/burst2. It is not anonymous public file hosting.
+
+
+---
+
+## Preserved implementation detail
+
 # Version 2 additions
 
 | Method | Path | Behavior |

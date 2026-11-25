@@ -1,0 +1,228 @@
+{
+  "checked_at": "2026-11-24T17:33:54.416923+00:00",
+  "runs": [
+    {
+      "mode": "generated",
+      "answer": "Encryption mechanisms transform readable information into ciphertext using cryptographic keys. [1]\n\nNetwork security defends systems against intruders and malicious traffic by filtering connections and monitoring for suspicious activity. [2]",
+      "claims": [
+        {
+          "text": "Encryption mechanisms transform readable information into ciphertext using cryptographic keys.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Encryption transforms readable information into ciphertext using cryptographic keys."
+          ]
+        },
+        {
+          "text": "Network security defends systems against intruders and malicious traffic by filtering connections and monitoring for suspicious activity.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.6004968881607056,
+          "rrf": 0.03252247488101534
+        },
+        {
+          "citation": 2,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.46814990043640137,
+          "rrf": 0.03252247488101534
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 2,
+        "context_characters": 558,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 3852.66,
+          "fallback": false
+        }
+      },
+      "question": "How do encryption and network security protect information?",
+      "retrieval_query": "How do encryption and network security protect information?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 3894.12,
+        "generation": {
+          "total_duration": 1557291500,
+          "load_duration": 6000600,
+          "prompt_eval_count": 542,
+          "prompt_eval_duration": 66837000,
+          "eval_count": 112,
+          "eval_duration": 1449294000
+        },
+        "total_ms": 5720.07
+      },
+      "conversation_id": "cca68fc0-5018-47f0-87ae-740fae922389"
+    },
+    {
+      "mode": "generated",
+      "answer": "TLS protects data in transit. [1]\n\nKey management and rotation are essential controls. [1]",
+      "claims": [
+        {
+          "text": "TLS protects data in transit.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "TLS protects data in transit."
+          ]
+        },
+        {
+          "text": "Key management and rotation are essential controls.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Key management and rotation are essential controls."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.4454103708267212,
+          "rrf": 0.03278688524590164
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 3,
+        "context_characters": 824,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 649.82,
+          "fallback": false
+        }
+      },
+      "question": "What about protecting data in transit?",
+      "retrieval_query": "What about protecting data in transit?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 687.43,
+        "initial_generation": {
+          "total_duration": 1658402100,
+          "load_duration": 13807500,
+          "prompt_eval_count": 606,
+          "prompt_eval_duration": 64769999,
+          "eval_count": 120,
+          "eval_duration": 1559135000
+        },
+        "correction_attempted": true,
+        "generation": {
+          "total_duration": 1252823300,
+          "load_duration": 9709800,
+          "prompt_eval_count": 654,
+          "prompt_eval_duration": 69984000,
+          "eval_count": 88,
+          "eval_duration": 1157675000
+        },
+        "total_ms": 4034.69
+      },
+      "conversation_id": "cca68fc0-5018-47f0-87ae-740fae922389"
+    },
+    {
+      "mode": "generated",
+      "answer": "Repairing leaks prevents avoidable water loss. [1]",
+      "claims": [
+        {
+          "text": "Repairing leaks prevents avoidable water loss.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Repairing leaks prevents avoidable water loss."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "b39aa36d-d2b7-475e-bca0-06739093298c",
+          "chunk_id": 61,
+          "filename": "water-conservation.txt",
+          "original_name": "water-conservation.txt",
+          "section": "Content",
+          "passage": "Water conservation on farms combines drip irrigation with soil moisture monitoring. Drip irrigation delivers water near plant roots. Farmers can reduce evaporation by watering early in the morning and using mulch. Repairing leaks prevents avoidable water loss.",
+          "similarity": 0.6934904456138611,
+          "rrf": 0.03278688524590164
+        }
+      ],
+      "coverage": {
+        "indexed_files": 1,
+        "candidate_chunks": 1,
+        "selected_chunks": 1,
+        "context_characters": 260,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 553.11,
+          "fallback": false
+        }
+      },
+      "question": "How can farmers reduce avoidable water loss?",
+      "retrieval_query": "How can farmers reduce avoidable water loss?",
+      "model": "qwen2.5:3b",
+      "warning": "Only statements that passed source verification are shown; some generated details were omitted.",
+      "timings": {
+        "retrieval_ms": 576.86,
+        "initial_generation": {
+          "total_duration": 1539984100,
+          "load_duration": 9857500,
+          "prompt_eval_count": 477,
+          "prompt_eval_duration": 35485000,
+          "eval_count": 111,
+          "eval_duration": 1481003000
+        },
+        "correction_attempted": true,
+        "generation": {
+          "total_duration": 1416168900,
+          "load_duration": 4840000,
+          "prompt_eval_count": 525,
+          "prompt_eval_duration": 57916000,
+          "eval_count": 103,
+          "eval_duration": 1341072000
+        },
+        "total_ms": 3803.42
+      },
+      "conversation_id": "3cd3c279-1824-46b8-9a93-bec032d16f92"
+    }
+  ],
+  "manual_review_required": false,
+  "manual_review": "Reviewed against the actual fixture passages. Multi-document statements are supported; the network quote is narrower than its complete supporting passage. Follow-up TLS/key-management statements are present. Water output retains only supported leak repair and explicitly omits other details. This is not a universal entailment guarantee.",
+  "generated_multi_document": true,
+  "generated_followup": true,
+  "generated_water": true
+}

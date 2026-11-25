@@ -1,0 +1,182 @@
+{
+  "aws": {
+    "connected": true,
+    "bucket": "cloudvault-d0c2b49b4347",
+    "region": "ap-southeast-2",
+    "region_matches": true,
+    "public_access_blocked": true,
+    "note": null
+  },
+  "objects": [
+    {
+      "id": "1f246749-816a-4fd6-8515-452caa5c54f8",
+      "key": "cloudvault/files/1f246749-816a-4fd6-8515-452caa5c54f8/academic-information.md",
+      "size": 275,
+      "sha256": "f756fb412c98c9b1f7d5e2bf40f621eb580f07d120070efaff15c3e8aa268616",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+      "key": "cloudvault/files/0c4046f0-d0cf-4a37-9eae-64fb28c48a35/encryption.txt",
+      "size": 261,
+      "sha256": "c96410671a0fc369dae8cae602de8822c0375ba9693c0ed9b87ded2c65b11f39",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "9b558dfc-532e-4fe0-a34c-7e0b7a44bb30",
+      "key": "cloudvault/files/9b558dfc-532e-4fe0-a34c-7e0b7a44bb30/cloud-computing.txt",
+      "size": 268,
+      "sha256": "f384c71c79eeab82f65f1518b340df9b029a63a10027b3c010415c0fa93d7e96",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "e372bff8-6a1e-4f8f-a1f6-48daa66103d4",
+      "key": "cloudvault/files/e372bff8-6a1e-4f8f-a1f6-48daa66103d4/renewable-energy.txt",
+      "size": 289,
+      "sha256": "cc4e0b3fa0d29abec4da2cd9e7f0bd78f5370f78f673fbc17d7604fadfec4cdc",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "615e9922-a3a7-4cd9-b83b-2d3d003d4c19",
+      "key": "cloudvault/files/615e9922-a3a7-4cd9-b83b-2d3d003d4c19/databases.txt",
+      "size": 284,
+      "sha256": "78131639e9f316b7e960e98ed691ec60dc766c9fc75edacb3e6b5a90f5a19a14",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "e48ed2d3-383d-442b-a0bc-9eace9256ded",
+      "key": "cloudvault/files/e48ed2d3-383d-442b-a0bc-9eace9256ded/machine-learning.txt",
+      "size": 309,
+      "sha256": "44be7f4cf3a509c8778374c09ded085ee8026ae0d9142519570198e8fe7e6cb0",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+      "key": "cloudvault/files/9eff9840-d04c-4b99-963f-dbe331405eba/network-security.txt",
+      "size": 301,
+      "sha256": "d9693ef84ee55f902fe9f2dbe1f86b0a1b36399ebaa438b8319f20ecb75e6c9f",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    },
+    {
+      "id": "49b35a62-780e-4c71-a267-4c5db4058421",
+      "key": "cloudvault/files/49b35a62-780e-4c71-a267-4c5db4058421/object-storage.txt",
+      "size": 322,
+      "sha256": "cdeb4a1a9ab6a93968649b0e7bf4c672c6a7d71f2b769942ef07cc69ce27886f",
+      "byte_match": true,
+      "encryption": "AES256",
+      "status": "indexed"
+    }
+  ],
+  "semantic": [
+    {
+      "query": "Where can I store my digital files remotely?",
+      "expected": "object-storage.txt",
+      "rank": 1,
+      "results": [
+        {
+          "name": "object-storage.txt",
+          "similarity": 0.3596402406692505
+        }
+      ]
+    },
+    {
+      "query": "How can I protect information from hackers?",
+      "expected": "network-security.txt",
+      "rank": 1,
+      "results": [
+        {
+          "name": "network-security.txt",
+          "similarity": 0.394550621509552
+        },
+        {
+          "name": "encryption.txt",
+          "similarity": 0.3443083167076111
+        }
+      ]
+    },
+    {
+      "query": "How do computers learn from examples?",
+      "expected": "machine-learning.txt",
+      "rank": 1,
+      "results": [
+        {
+          "name": "machine-learning.txt",
+          "similarity": 0.5660549998283386
+        }
+      ]
+    },
+    {
+      "query": "How can structured information be stored and retrieved?",
+      "expected": "databases.txt",
+      "rank": 1,
+      "results": [
+        {
+          "name": "databases.txt",
+          "similarity": 0.5496244430541992
+        },
+        {
+          "name": "machine-learning.txt",
+          "similarity": 0.32340162992477417
+        },
+        {
+          "name": "encryption.txt",
+          "similarity": 0.27591028809547424
+        }
+      ]
+    },
+    {
+      "query": "Which documents discuss environmentally friendly energy?",
+      "expected": "renewable-energy.txt",
+      "rank": 1,
+      "results": [
+        {
+          "name": "renewable-energy.txt",
+          "similarity": 0.5218183398246765
+        }
+      ]
+    }
+  ],
+  "keyword": {
+    "top_file": "object-storage.txt",
+    "score": 1.0
+  },
+  "hybrid": {
+    "top_file": "object-storage.txt",
+    "score": 0.03252247488101534
+  },
+  "reconciliation": {
+    "untracked_objects": [],
+    "missing_objects": [],
+    "note": "Read-only report; nothing is deleted or imported automatically."
+  },
+  "settings": {
+    "region": "ap-southeast-2",
+    "bucket": "cloudvault-d0c2b49b4347",
+    "prefix": "cloudvault/files/",
+    "storage_mode": "aws",
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "dimension": 384,
+    "model_loaded": true,
+    "model_error": null,
+    "max_upload_mb": 25,
+    "chunk_tokens": 220,
+    "overlap_tokens": 32,
+    "max_extracted_chars": 500000,
+    "version": "1.0.0",
+    "index_location": "Local SQLite; original files are stored in private Amazon S3"
+  }
+}

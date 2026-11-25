@@ -17,6 +17,10 @@ export default function SmartSearch({
   onAsk?: (ids: string[]) => void;
 }) {
   const [history, setHistory] = usePreference<string[]>("recentSearches", []);
+  const [backend, setBackend] = useState<{
+    provider: string;
+    latency_ms?: number;
+  } | null>(null);
   const [query, setQuery] = useState(initialQuery),
     [mode, setMode] = useState("semantic"),
     [ext, setExt] = useState(""),
@@ -33,7 +37,10 @@ export default function SmartSearch({
     setBusy(true);
     setResults(null);
     try {
-      const r = await api<{ results: SearchResult[] }>(
+      const r = await api<{
+        results: SearchResult[];
+        retrieval_backend?: { provider: string; latency_ms?: number };
+      }>(
         "/search?" +
           new URLSearchParams({
             q: query,
@@ -44,6 +51,7 @@ export default function SmartSearch({
           }),
       );
       setResults(r.results);
+      setBackend(r.retrieval_backend || null);
       setSearched(query);
       setHistory((old) =>
         [query, ...old.filter((q) => q !== query)].slice(0, 8),
@@ -169,6 +177,18 @@ export default function SmartSearch({
               {results.length === 1 ? "file" : "files"}
             </h2>
             <span className="muted">Results for “{searched}”</span>
+            {backend && (
+              <span className="provider-badge">
+                {backend.provider === "s3vectors"
+                  ? "AWS S3 Vectors"
+                  : backend.provider === "local_fallback"
+                    ? "Local fallback"
+                    : "Local search"}
+                {backend.latency_ms !== undefined
+                  ? " · " + backend.latency_ms.toFixed(0) + " ms retrieval"
+                  : ""}
+              </span>
+            )}
             {results.length > 0 && onAsk && (
               <button
                 className="secondary compact"

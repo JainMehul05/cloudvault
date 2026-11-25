@@ -1,37 +1,14 @@
-# Version 2 limits
+# Operational limits
 
-- Single trusted user on localhost; no public multi-user deployment.
-- A compact 3B model has finite reasoning ability. Valid source IDs and exact quotes establish provenance but cannot guarantee that every inference follows.
-- Retrieval uses selected passages, not every page. No OCR, cross-encoder reranker or exhaustive whole-corpus summarizer is claimed.
-- Follow-ups use recent user-question context and a fixed file scope. Start a new conversation to change scope.
-- Answers are returned on completion; the interface remains responsive and offers cancellation, but token streaming is not implemented.
-- GPU memory is shared with other apps. Cold model loads and CPU fallback can be slow. Timeouts yield clearly labeled source excerpts.
-- S3 and SQLite are separate systems; there is no distributed transaction or durable job queue.
-- Automated Brave file selection is permission-restricted. API upload and real S3 bytes were checked separately from browser navigation.
-
----
-
-# Limitations and future work
-
-## Current boundaries
-
-- Single-user localhost operation; not production multi-tenant hosting.
-- Original bytes are cloud-backed; metadata/search vectors are local and require backups.
-- No OCR. Scanned/image-only PDFs are reported empty; images, audio, video and unknown binaries are stored but not content-indexed.
-- PDF, DOCX, XLSX and text formats only. Formatting, equations, charts and reading order may be imperfect; extracted text preview is not a pixel-perfect document viewer.
-- No logical folders, grid view, dark theme, sharing, collaborative editing or chatbot. These were optional and omitted to protect the core workflow.
-- Linear scans of local vectors and extracted text; appropriate for small academic collections rather than millions of chunks.
-- Token-aware chunks can cross sentence boundaries. Page references exist for PDF chunks, worksheet names for XLSX; exact full-text results use a content label.
-- Queries have a 1,000-character API cap and must also fit the actual model token limit for semantic modes.
-- Model identifier/dimension mismatch is detected by excluding incompatible chunks; reindex manually after model configuration changes. A same-identifier upstream weight revision is not a separately versioned index migration.
-- Background indexing is not a durable distributed queue. Interrupted work becomes failed and can be retried.
-- No atomic transaction spans S3 and SQLite. Reconciliation is read-only and never deletes untracked objects.
-- File size 25 MiB default, extracted text 500k characters, PDF 500 pages, spreadsheet 50k rows/sheet, archive expansion 75 MiB, at most 3,000 chunks. Oversized extraction fails visibly rather than claiming partial indexing.
-- AWS session and internet are required for cloud upload/download. Keyword search can use the local index without AWS access. Cached semantic inference can run without model-hub connectivity.
-- University sample-set retrieval is not a measured benchmark for broad-language accuracy.
-
-## Future improvements
-
-Add local OCR, sandboxed parser worker processes with execution deadlines, durable job tracking, bulk controlled reindex, structured import/recovery, incremental vector caches, authenticated multi-user ownership, managed backups and access-scoped AWS IAM. Provision additional cloud infrastructure only after explicit approval and a cost review.
-
-
+- Single-user localhost lab application; no multi-tenant isolation, public hosting or enterprise SSO. Do not expose ports 8000/11434 publicly.
+- AWS event route is paused between bounded rehearsals. Normal uploads still run local extraction and cloud-vector/metadata sync; autonomous cloud stages require the bounded session. No cloud callback to a laptop.
+- Account eligibility and credits are time-dependent. A 60-second fail-closed application guard is not a billing cap for AWS resources. No Paid upgrade or own-money authorization exists.
+- Full extracted text/conversations remain local; cloud metadata/vector durability is not a complete laptop backup. Keep online SQLite backups and original files.
+- Only two explicitly hash-approved non-sensitive fixtures produce plaintext cloud derived artifacts. Other formats are classified for local extraction. Textract/OCR and cloud LLM inference are not enabled.
+- Text PDFs, DOCX, text/Markdown/code/CSV/JSON/HTML/XLSX are indexed; scanned PDF/image OCR, audio/video understanding and arbitrary binary extraction are unsupported. Unsupported originals remain downloadable.
+- Qwen 3B can omit nuance or make plausible unsupported claims. Exact quote/numeric/relevance checks reduce errors but do not prove entailment. One correction then explicit extractive fallback; small curated tests do not establish universal accuracy.
+- Answers summarize retrieved excerpts, not a guaranteed exhaustive reading of every page. Complex comparisons, ambiguous follow-ups, contradictions, languages and adversarial documents need more independent evaluation.
+- Fixed evidence/context and upload/chunk limits protect resources. Large corpora need different indexing/query strategies. Cloud pagination is bounded; no million-document scaling claim.
+- Safe plain-text claim rendering is used instead of arbitrary model HTML/Markdown. Rich generated tables/code layouts and streaming tokens are not implemented; source-grounded paragraphs and citations remain functional.
+- Real logs/native metrics are timestamped snapshots and can lag. Missing data is unavailable. Negative-test errors are retained. No formal accessibility certification, security audit or billing reconciliation is claimed.
+- Browser automation file/download controls remain enabled. The restored fixture used the normal multipart API; normal browser download was user-confirmed.

@@ -1,0 +1,218 @@
+{
+  "runs": [
+    {
+      "mode": "generated",
+      "answer": "Encryption, TLS, and AES protect data in transit, at rest, and through key management, respectively. [1]\n\nFirewalls, multifactor authentication, least-privilege permissions, and monitoring are network security controls. [2]",
+      "claims": [
+        {
+          "text": "Encryption, TLS, and AES protect data in transit, at rest, and through key management, respectively.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls."
+          ]
+        },
+        {
+          "text": "Firewalls, multifactor authentication, least-privilege permissions, and monitoring are network security controls.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.5018649697303772,
+          "rrf": 0.03278688524590164
+        },
+        {
+          "citation": 2,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.47226619720458984,
+          "rrf": 0.03225806451612903
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 5,
+        "context_characters": 1590,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 3088.86,
+          "fallback": false
+        }
+      },
+      "question": "Which concrete controls protect data in transit, data at rest, and network access?",
+      "retrieval_query": "Which concrete controls protect data in transit, data at rest, and network access?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 3144.5,
+        "generation": {
+          "total_duration": 2580707000,
+          "load_duration": 14816700,
+          "prompt_eval_count": 930,
+          "prompt_eval_duration": 162611000,
+          "eval_count": 171,
+          "eval_duration": 2305120000
+        },
+        "total_ms": 6051.25
+      },
+      "conversation_id": "7580f287-65ee-47d9-9d7a-9100e6bd91ff"
+    },
+    {
+      "mode": "extractive",
+      "answer": "Relevant source passages are shown below. This is an extractive response, not generated synthesis.",
+      "claims": [
+        {
+          "text": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls."
+          ]
+        },
+        {
+          "text": "Cloud computing delivers on-demand computing resources over the internet. Customers rent capacity rather than owning every server. Elasticity adjusts resources to demand. Shared responsibility separates provider infrastructure security from customer data protection.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Cloud computing delivers on-demand computing resources over the internet. Customers rent capacity rather than owning every server. Elasticity adjusts resources to demand. Shared responsibility separates provider infrastructure security from customer data protection."
+          ]
+        },
+        {
+          "text": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "citations": [
+            3
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.4454103708267212,
+          "rrf": 0.03278688524590164
+        },
+        {
+          "citation": 2,
+          "file_id": "9b558dfc-532e-4fe0-a34c-7e0b7a44bb30",
+          "chunk_id": 6,
+          "filename": "cloud-computing.txt",
+          "original_name": "cloud-computing.txt",
+          "section": "Content",
+          "passage": "Cloud computing delivers on-demand computing resources over the internet. Customers rent capacity rather than owning every server. Elasticity adjusts resources to demand. Shared responsibility separates provider infrastructure security from customer data protection.",
+          "similarity": 0.3205333948135376,
+          "rrf": 0.03036576949620428
+        },
+        {
+          "citation": 3,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.4223061800003052,
+          "rrf": 0.016129032258064516
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 3,
+        "context_characters": 824,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 669.84,
+          "fallback": false
+        }
+      },
+      "question": "What about protecting data in transit?",
+      "retrieval_query": "What about protecting data in transit?",
+      "model": null,
+      "warning": "Generated claims did not pass citation/quotation validation. Showing source excerpts instead.",
+      "timings": {
+        "retrieval_ms": 752.48,
+        "initial_generation": {
+          "total_duration": 3674680800,
+          "load_duration": 17466900,
+          "prompt_eval_count": 717,
+          "prompt_eval_duration": 62488000,
+          "eval_count": 272,
+          "eval_duration": 3550158000
+        },
+        "correction_attempted": true,
+        "generation": {
+          "total_duration": 738310500,
+          "load_duration": 13456400,
+          "prompt_eval_count": 765,
+          "prompt_eval_duration": 71549000,
+          "eval_count": 45,
+          "eval_duration": 630292000
+        },
+        "total_ms": 5590.74
+      },
+      "conversation_id": "7580f287-65ee-47d9-9d7a-9100e6bd91ff"
+    },
+    {
+      "mode": "insufficient",
+      "answer": "The indexed documents do not contain enough relevant evidence to answer this question.",
+      "claims": [],
+      "sources": [],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 0,
+        "context_characters": 0,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 692.34,
+          "fallback": false
+        }
+      },
+      "question": "What was the final score of the 1827 lunar baseball championship?",
+      "retrieval_query": "What was the final score of the 1827 lunar baseball championship?",
+      "model": null,
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 744.7,
+        "total_ms": 744.72
+      },
+      "conversation_id": "6eb07366-fa3f-48c0-b62b-38100b4ad3e3"
+    }
+  ],
+  "generated_multi_document": true,
+  "generated_followup": false,
+  "no_evidence_abstained": true,
+  "manual_review_required": true
+}

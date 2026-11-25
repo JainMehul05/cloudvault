@@ -73,6 +73,21 @@ def test_citation_validation():
     assert len(validate_claims(good, sources)) == 1
     for claim in [
         Claim(
+            text="TLS and AES protect data at rest and in transit, respectively.",
+            sources=[1],
+            quotes=["TLS protects data in transit. AES protects data at rest."],
+        ),
+        Claim(
+            text="TLS encrypts data in transit, protecting it from eavesdropping and man-in-the-middle attacks.",
+            sources=[1],
+            quotes=["TLS protects data in transit."],
+        ),
+        Claim(
+            text="TLS protects data in transit with 100 percent guaranteed security.",
+            sources=[1],
+            quotes=["TLS protects data in transit."],
+        ),
+        Claim(
             text="Farmers grow vegetables using sunlight.",
             sources=[1],
             quotes=["TLS protects data in transit."],
@@ -152,8 +167,10 @@ def test_invalid_generation_falls_back(client, monkeypatch):
     c, _ = client
     corpus(c)
     monkeypatch.setattr(llm, "status", available)
+    calls = []
 
     async def bad(*args):
+        calls.append(args[0])
         return GroundedAnswer(
             insufficient=False,
             claims=[
@@ -168,8 +185,59 @@ def test_invalid_generation_falls_back(client, monkeypatch):
         "/api/ai/ask", json={"question": "How does encryption protect information?"}
     ).json()
     assert answer["mode"] == "extractive"
+    assert len(calls) == 2 and "Citation correction" in calls[1]
     assert "validation" in answer["warning"]
     assert all(88 not in claim["citations"] for claim in answer["claims"])
+
+
+def test_bounded_citation_correction_recovers(client, monkeypatch):
+    c, _ = client
+    corpus(c)
+    monkeypatch.setattr(llm, "status", available)
+    calls = []
+
+    async def generate(question, sources):
+        calls.append(question)
+        source = sources[0]
+        quote = source["passage"].split(". ")[0] + "."
+        identifier = 99 if len(calls) == 1 else source["citation"]
+        return GroundedAnswer(
+            insufficient=False,
+            claims=[Claim(text=quote, sources=[identifier], quotes=[quote])],
+        ), {}
+
+    monkeypatch.setattr(llm, "generate", generate)
+    answer = c.post(
+        "/api/ai/ask", json={"question": "How does encryption protect information?"}
+    ).json()
+    assert answer["mode"] == "generated"
+    assert len(calls) == 2 and answer["timings"]["correction_attempted"]
+    assert all(99 not in claim["citations"] for claim in answer["claims"])
+
+
+def test_partial_generation_omits_unsupported_claims(client, monkeypatch):
+    c, _ = client
+    corpus(c)
+    monkeypatch.setattr(llm, "status", available)
+
+    async def generate(question, sources):
+        source = sources[0]
+        quote = source["passage"].split(". ")[0] + "."
+        return GroundedAnswer(
+            insufficient=False,
+            claims=[
+                Claim(text=quote, sources=[source["citation"]], quotes=[quote]),
+                Claim(text="Unsupported detail", sources=[99], quotes=["Invented quotation"]),
+            ],
+        ), {}
+
+    monkeypatch.setattr(llm, "generate", generate)
+    answer = c.post(
+        "/api/ai/ask", json={"question": "How does encryption protect information?"}
+    ).json()
+    assert answer["mode"] == "generated" and len(answer["claims"]) == 1
+    assert "omitted" in answer["warning"]
+    assert "Unsupported detail" not in answer["answer"]
 
 
 def test_scope_validation_and_starred(client, monkeypatch):
@@ -219,7 +287,7 @@ def test_migration_preserves_bytes(client):
             (r["id"], hashlib.sha256(r["vector"]).hexdigest())
             for r in db.execute("SELECT id,vector FROM chunks")
         ]
-        assert db.execute("PRAGMA user_version").fetchone()[0] == 2
+        assert db.execute("PRAGMA user_version").fetchone()[0] == 3
     assert before == after
     assert c.get("/api/files/" + record["id"]).json()["object_key"] == record["object_key"]
     assert (

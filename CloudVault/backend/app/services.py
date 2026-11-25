@@ -6,6 +6,7 @@ from .extractor import extract
 from .embeddings import engine
 from .config import settings
 from . import storage
+from . import cloud
 
 logger = logging.getLogger("cloudvault")
 index_lock = threading.Lock()
@@ -26,6 +27,7 @@ def index_file(file_id):
                 db.execute(
                     "UPDATE files SET status='processing', error=NULL WHERE id=?", (file_id,)
                 )
+            cloud.enqueue(file_id)
             sections = extract(record["original_name"], storage.read(record["object_key"]))
             status = "unsupported" if sections is None else "empty" if not sections else "indexed"
             chunks, vectors = [], []
@@ -73,3 +75,7 @@ def index_file(file_id):
                     "UPDATE files SET status='failed', error=?, chunk_count=0 WHERE id=?",
                     (message, file_id),
                 )
+        try:
+            cloud.sync_file(file_id)
+        except Exception as error:
+            logger.warning("Cloud synchronization pending: %s", type(error).__name__)

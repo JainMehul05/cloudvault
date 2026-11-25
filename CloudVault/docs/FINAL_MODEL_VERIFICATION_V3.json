@@ -1,0 +1,236 @@
+{
+  "note": "Actual browser-driven runs; earlier imprecise cold run preserved for honest comparison. No universal entailment guarantee.",
+  "runs": [
+    {
+      "question": "How do encryption and network security protect information?",
+      "mode": "generated",
+      "answer": "Encryption mechanisms transform readable information into ciphertext using cryptographic keys, protecting data at rest. [1]\n\nNetwork security defends systems against intruders and malicious traffic by filtering connections, reducing multifactor authentication risk, and restricting access. [2]",
+      "claims": [
+        {
+          "text": "Encryption mechanisms transform readable information into ciphertext using cryptographic keys, protecting data at rest.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Encryption transforms readable information into ciphertext using cryptographic keys."
+          ]
+        },
+        {
+          "text": "Network security defends systems against intruders and malicious traffic by filtering connections, reducing multifactor authentication risk, and restricting access.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.6004968881607056,
+          "rrf": 0.03252247488101534
+        },
+        {
+          "citation": 2,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.46814990043640137,
+          "rrf": 0.03252247488101534
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 2,
+        "context_characters": 558,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 3410.34,
+          "fallback": false
+        }
+      },
+      "retrieval_query": "How do encryption and network security protect information?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 86113.23,
+        "generation": {
+          "total_duration": 13005938200,
+          "load_duration": 10863221500,
+          "prompt_eval_count": 494,
+          "prompt_eval_duration": 491708000,
+          "eval_count": 122,
+          "eval_duration": 1629596000
+        },
+        "total_ms": 99539.27
+      },
+      "conversation_id": "f03dd976-c1c0-4211-a742-fd74fbd8bf2d"
+    },
+    {
+      "question": "How do encryption and network security protect information?",
+      "mode": "generated",
+      "answer": "Encryption transforms readable information into ciphertext using cryptographic keys, protecting data at rest. [1]\n\nNetwork security defends systems against intruders and malicious traffic, protecting against unauthorized access and data breaches. [2]",
+      "claims": [
+        {
+          "text": "Encryption transforms readable information into ciphertext using cryptographic keys, protecting data at rest.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "Encryption transforms readable information into ciphertext using cryptographic keys."
+          ]
+        },
+        {
+          "text": "Network security defends systems against intruders and malicious traffic, protecting against unauthorized access and data breaches.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.6174454689025879,
+          "rrf": 0.03252247488101534
+        },
+        {
+          "citation": 2,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.4609415531158447,
+          "rrf": 0.03252247488101534
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 2,
+        "context_characters": 558,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 1585.62,
+          "fallback": false
+        }
+      },
+      "retrieval_query": "Follow-up: How do encryption and network security protect information?\nPrevious user questions: How do encryption and network security protect information?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 1664.5,
+        "generation": {
+          "total_duration": 1667528800,
+          "load_duration": 14296100,
+          "prompt_eval_count": 566,
+          "prompt_eval_duration": 91440000,
+          "eval_count": 118,
+          "eval_duration": 1525469000
+        },
+        "total_ms": 3892.2
+      },
+      "conversation_id": "f03dd976-c1c0-4211-a742-fd74fbd8bf2d"
+    },
+    {
+      "question": "Which concrete controls protect data in transit, data at rest, and network access?",
+      "mode": "generated",
+      "answer": "Encryption mechanisms, such as TLS and AES, protect data in transit and at rest. [1]\n\nNetwork security controls, including firewalls, multifactor authentication, and least-privilege permissions, defend against intruders and malicious traffic. [2]",
+      "claims": [
+        {
+          "text": "Encryption mechanisms, such as TLS and AES, protect data in transit and at rest.",
+          "citations": [
+            1
+          ],
+          "quotes": [
+            "TLS protects data in transit. AES protects data at rest."
+          ]
+        },
+        {
+          "text": "Network security controls, including firewalls, multifactor authentication, and least-privilege permissions, defend against intruders and malicious traffic.",
+          "citations": [
+            2
+          ],
+          "quotes": [
+            "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access."
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "citation": 1,
+          "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+          "chunk_id": 7,
+          "filename": "encryption.txt",
+          "original_name": "encryption.txt",
+          "section": "Content",
+          "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+          "similarity": 0.5018649697303772,
+          "rrf": 0.03278688524590164
+        },
+        {
+          "citation": 2,
+          "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+          "chunk_id": 2,
+          "filename": "network-security.txt",
+          "original_name": "network-security.txt",
+          "section": "Content",
+          "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+          "similarity": 0.47226619720458984,
+          "rrf": 0.03225806451612903
+        }
+      ],
+      "coverage": {
+        "indexed_files": 11,
+        "candidate_chunks": 61,
+        "selected_chunks": 5,
+        "context_characters": 1590,
+        "retrieval_backend": {
+          "provider": "s3vectors",
+          "aws_calls": 1,
+          "latency_ms": 1933.88,
+          "fallback": false
+        }
+      },
+      "retrieval_query": "Which concrete controls protect data in transit, data at rest, and network access?",
+      "model": "qwen2.5:3b",
+      "warning": null,
+      "timings": {
+        "retrieval_ms": 2022.44,
+        "generation": {
+          "total_duration": 2175870700,
+          "load_duration": 23109600,
+          "prompt_eval_count": 826,
+          "prompt_eval_duration": 118938000,
+          "eval_count": 150,
+          "eval_duration": 1983683000
+        },
+        "total_ms": 4615.05
+      },
+      "conversation_id": "94031914-cdac-4465-9041-69b4504019db"
+    }
+  ]
+}

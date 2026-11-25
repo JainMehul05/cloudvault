@@ -1,0 +1,77 @@
+{
+  "mode": "generated",
+  "answer": "Encryption mechanisms like AES protect data at rest by converting readable information into ciphertext using cryptographic keys. [1]\n\nNetwork security controls such as firewalls, multifactor authentication, and least-privilege permissions defend systems against intruders and malicious traffic. [2]",
+  "claims": [
+    {
+      "text": "Encryption mechanisms like AES protect data at rest by converting readable information into ciphertext using cryptographic keys.",
+      "citations": [
+        1
+      ],
+      "quotes": [
+        "Encryption transforms readable information into ciphertext using cryptographic keys."
+      ]
+    },
+    {
+      "text": "Network security controls such as firewalls, multifactor authentication, and least-privilege permissions defend systems against intruders and malicious traffic.",
+      "citations": [
+        2
+      ],
+      "quotes": [
+        "Network security defends systems against intruders and malicious traffic."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "citation": 1,
+      "file_id": "0c4046f0-d0cf-4a37-9eae-64fb28c48a35",
+      "chunk_id": 7,
+      "filename": "encryption.txt",
+      "original_name": "encryption.txt",
+      "section": "Content",
+      "passage": "Encryption transforms readable information into ciphertext using cryptographic keys. TLS protects data in transit. AES protects data at rest. Authorized recipients need the correct keys to recover plaintext. Key management and rotation are essential controls.",
+      "similarity": 0.5867642164230347,
+      "rrf": 0.03252247488101534
+    },
+    {
+      "citation": 2,
+      "file_id": "9eff9840-d04c-4b99-963f-dbe331405eba",
+      "chunk_id": 2,
+      "filename": "network-security.txt",
+      "original_name": "network-security.txt",
+      "section": "Content",
+      "passage": "Network security defends systems against intruders and malicious traffic. Firewalls filter connections, multifactor authentication reduces stolen-password risk, and least-privilege permissions restrict access. Regular patching closes known vulnerabilities. Monitoring can detect suspicious activity.",
+      "similarity": 0.473601758480072,
+      "rrf": 0.03252247488101534
+    }
+  ],
+  "coverage": {
+    "indexed_files": 10,
+    "candidate_chunks": 60,
+    "selected_chunks": 2,
+    "context_characters": 558,
+    "retrieval_backend": {
+      "provider": "s3vectors",
+      "aws_calls": 1,
+      "latency_ms": 1594.99,
+      "fallback": false
+    }
+  },
+  "question": "How can encryption and network security protect information?",
+  "retrieval_query": "How can encryption and network security protect information?",
+  "model": "qwen2.5:3b",
+  "warning": null,
+  "timings": {
+    "retrieval_ms": 15587.29,
+    "generation": {
+      "total_duration": 9065272900,
+      "load_duration": 6889225300,
+      "prompt_eval_count": 494,
+      "prompt_eval_duration": 452925000,
+      "eval_count": 127,
+      "eval_duration": 1688403000
+    },
+    "total_ms": 25000.29
+  },
+  "conversation_id": "45d5333d-3e9e-494a-873b-3ae3c27bb963"
+}

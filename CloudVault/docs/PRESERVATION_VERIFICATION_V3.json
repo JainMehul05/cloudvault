@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-11-24T17:09:51.006996+00:00",
+  "unchanged_original_documents": 10,
+  "unchanged_original_vectors": 59,
+  "s3_validation": "HEAD size and existence for all unaffected originals; exact restored bytes verified in separate restoration report",
+  "prior_conversations_and_exchanges_preserved": true,
+  "restored_water_file_id": "b39aa36d-d2b7-475e-bca0-06739093298c",
+  "event_rule": "DISABLED",
+  "queue_mapping": "Disabled",
+  "account_plan": "FREE",
+  "account_status": "ACTIVE",
+  "remaining_credits_usd": 140.0,
+  "expires_at": "2027-05-24 10:27:24.967000+00:00",
+  "account_upgrade_performed": false,
+  "current_files": 12,
+  "current_vectors": 61
+}

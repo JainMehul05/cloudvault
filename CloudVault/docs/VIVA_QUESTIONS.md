@@ -1,3 +1,35 @@
+# CloudVault 3.0 cloud viva extension
+
+| Question | Demonstrable answer |
+|---|---|
+| What actually runs in AWS? | Original objects, vector queries, metadata/jobs, bounded event processing, IAM API, configuration and operational logs/metrics. Models/UI/API/full text stay local. |
+| How is this more than S3 storage? | Real S3 Vectors dense query, DynamoDB metadata, EventBridge/SQS/Lambda/Standard workflow, failure handling and signed metadata API are exercised. |
+| Does AWS call your laptop? | No. The cloud stage records awaiting-local; the laptop resumes outbound with bounded reconciliation. |
+| How does semantic search differ from keyword search? | MiniLM maps meaning to normalized384D vectors; S3 executes cosine matching. BM25 supplies exact lexical evidence; RRF combines ranks. |
+| Why stable vector keys? | File/chunk/text hash binds results to current content; stale/deleted matches are rejected. |
+| What happens on duplicate events? | Stable execution name based on key/revision; ExecutionAlreadyExists is idempotent. ETag protects against stale originals. |
+| Why SQS and a DLQ? | Buffering, bounded concurrency, visibility timeout, partial failure retry and isolated poison-message inspection. |
+| Why visibility180s and Lambda30s? | Visibility exceeds invocation duration, reducing premature duplicate delivery; retries are finite. |
+| Why Standard Step Functions? | Inspectable durable execution and Catch/failure history for a short bounded lab workflow. |
+| How is the API private? | Routable HTTPS but every route AWS_IAM; unsigned403, server-side SigV4 succeeds; no browser credential. |
+| Is Qwen an AWS model? | No. Existing local Qwen3B on RTX4050; no Bedrock inference or paid AI API. |
+| Are citations guaranteed correct? | IDs/quotes/relevance/numerals are checked; a human can open evidence. Automated checks do not prove entailment. |
+| What happens with conflicting sources? | Present both policies with separate citations; do not invent a resolution. Actual30/90 day test recorded. |
+| Is this free forever? | No such claim. Existing FREE plan/eligible credits only; no Paid upgrade; expiry/credits checked, consumers paused, retained storage uses credits. |
+| How is cost bounded? | Minimal Lambda/concurrency/retries/log retention, IAM throttle, no polling, no NAT/VM/paid model. App guard is not an AWS billing cap. |
+| Why no cross-encoder? | Curated ranking set has no misses to demonstrate gain; another model consumes limited RAM/VRAM/disk. |
+| Is cloud metadata a full backup? | No. Full text/history remain in SQLite; preserve online backup and originals for rebuild. |
+| Which tests are actual? | Separate raw AWS/model/browser reports; isolated unit fakes are identified. Native canary and reconciled water paths are distinguished. |
+| Why pause the event route? | Prevent unnecessary background polling/invocations between bounded demonstrations under the zero-own-money constraint. |
+| How do you remove resources safely? | Read-only cleanup inventory; separate approval, export evidence/data, preserve external originals and unrelated resources. |
+
+The earlier 78 viva items below remain useful for the preserved application; architecture statements are superseded by the 3.0 explanation above.
+
+
+---
+
+## Preserved implementation detail
+
 # Viva questions and concise answers
 
 1. **What problem does CloudVault solve?** It retrieves stored documents by meaning or exact content when the user cannot remember filenames.

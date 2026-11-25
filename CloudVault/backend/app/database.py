@@ -77,6 +77,21 @@ def initialize():
             )
             db.execute("INSERT INTO chunk_fts(chunk_fts) VALUES('rebuild')")
             db.execute("PRAGMA user_version=2")
+        if version < 3:
+            db.commit()
+            backup_dir = settings.data_dir / "backups"
+            backup_dir.mkdir(exist_ok=True)
+            backup_path = backup_dir / "schema-before-v3.db"
+            if not backup_path.exists():
+                target = sqlite3.connect(backup_path)
+                try:
+                    db.backup(target)
+                finally:
+                    target.close()
+            db.execute(
+                "CREATE TABLE IF NOT EXISTS cloud_outbox(file_id TEXT PRIMARY KEY, revision TEXT NOT NULL, payload TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, updated_at TEXT NOT NULL)"
+            )
+            db.execute("PRAGMA user_version=3")
         db.execute(
             "UPDATE files SET status='failed', error='Indexing interrupted by restart. Retry indexing.' WHERE status IN ('pending','processing')"
         )

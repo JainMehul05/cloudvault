@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-11-24T16:26:31.869275+00:00",
+  "unauthorized_http_status": 403,
+  "signed_status": "ok",
+  "signed_file_count": 11,
+  "metadata_source": "dynamodb_via_iam_api",
+  "ssm_standard_parameters_read": 3,
+  "browser_credentials": false,
+  "throttle_rps": 1,
+  "burst": 2
+}

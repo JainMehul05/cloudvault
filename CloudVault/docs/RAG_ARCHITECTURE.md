@@ -1,3 +1,16 @@
+# Cloud-backed RAG in 3.0
+
+Retrieval uses actual S3 Vectors plus local FTS hybrid ranking, active content validation, scope and multi-document diversity. Full extracted evidence remains in SQLite and is selected locally after cloud vector matches. Qwen2.5 3B runs through the existing loopback Ollama runtime on the RTX 4050; neither documents nor prompts go to a paid AI API.
+
+Structured output contains atomic claims, source IDs and exact quotations. Validation checks real IDs/quotes, lexical and MiniLM relevance, and rejects numerals absent from supporting quotations. One correction attempt (30-second bound) is permitted after invalid output; a second failure produces explicit cited extracts. There is no unbounded regeneration. Plain text avoids unsafe generated HTML/Markdown; rich tables/streaming tokens are not implemented.
+
+Follow-ups retain document scope and re-retrieve with previous user questions, never treating generated prior claims as evidence. Cancellation interrupts generation through an explicit request ID and AbortController. Evidence/source preview uses the real file/chunk/section and original-download route. Automated checks reduce errors but do not prove entailment; actual multi-doc, contradiction, water and insufficient-evidence cases were manually inspected. See raw AWS_RAG_VERIFICATION.json, AWS_WATER_RESTORATION_VERIFICATION.json and CONTRADICTION_EVALUATION_V3.json.
+
+
+---
+
+## Preserved implementation detail
+
 # Private document intelligence
 
 CloudVault separates retrieval from generation. Original files stay in the existing private S3 bucket. Extraction, MiniLM embeddings, SQLite, question history and Qwen inference run on this laptop. No question or passage is sent to an external AI API.

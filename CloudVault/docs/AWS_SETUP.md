@@ -1,3 +1,11 @@
+# CloudVault 3.0 AWS operation
+
+The consolidated plan was explicitly approved and eligible resources were actually deployed. Do not repeat provisioning for normal startup. Read AWS_RESOURCE_INVENTORY.md, AWS_PERMISSION_MATRIX.md, AWS_COST_ESTIMATE.md and AWS_LIVE_VERIFICATION.md for current evidence. Private runtime manifests retain identifiers; credentials remain backend-only. FREE/ACTIVE is required; never upgrade to Paid. Event rule/consumer are paused between bounded rehearsals. The original bucket, table and vector data remain preserved outside the compute stack.
+
+The older S3 setup detail below is historical foundation, not a claim that 3.0 uses S3 alone.
+
+---
+
 # AWS setup
 
 Use the existing `default` profile, `ap-southeast-2`, and `cloudvault-d0c2b49b4347`. Do not deploy the upstream template to run CloudVault.

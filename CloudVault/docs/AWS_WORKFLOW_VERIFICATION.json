@@ -1,0 +1,47 @@
+{
+  "started_at": "2026-11-24T16:31:33.785702+00:00",
+  "upload_method": "application_api",
+  "plan": "FREE",
+  "personal_spend_authorized": false,
+  "file_id": "4f452417-ffec-4f46-8196-b9efceef0ac7",
+  "sha256": "5baf6e09227e3516c398a189c862e4fa3ca7f906542d9a7480d5b6eb610663f8",
+  "original_bytes_match": true,
+  "cloud_stage": "succeeded",
+  "local_completion": 1,
+  "job_state": "searchable",
+  "cloud_extraction": "approved_plain_text",
+  "stage_history": [
+    {
+      "stage": "validated",
+      "at": "2026-11-24T16:31:59.805271+00:00"
+    },
+    {
+      "stage": "cloud_extracted_or_classified",
+      "at": "2026-11-24T16:32:00.086984+00:00"
+    },
+    {
+      "stage": "cloud_stage_complete",
+      "at": "2026-11-24T16:32:00.201996+00:00"
+    },
+    {
+      "stage": "awaiting_local_embedding",
+      "at": "2026-11-24T16:32:00.327219+00:00"
+    },
+    {
+      "stage": "local_embedding_and_cloud_vector_sync",
+      "at": "2026-11-24T16:32:24.108817+00:00"
+    }
+  ],
+  "workflow_execution_succeeded": true,
+  "workflow_history_events": 22,
+  "cloud_retrieval": {
+    "provider": "s3vectors",
+    "aws_calls": 1,
+    "latency_ms": 1169.84,
+    "fallback": false
+  },
+  "retrieved_fixture": true,
+  "download_bytes_match": true,
+  "event_route_paused": true,
+  "finished_at": "2026-11-24T16:32:37.918102+00:00"
+}

@@ -1,83 +1,34 @@
-# CloudVault 2.0
+# CloudVault 3.0
 
-**Private AWS file storage, semantic search and local document intelligence.**
+Private AWS storage, cloud semantic retrieval and local document intelligence, with a responsive landing page and workspace.
 
-The 2.0 upgrade adds a responsive light/dark workspace, file grid/list and stars, safe previews, a command palette, improved hybrid evidence retrieval and Ask CloudVault. The assistant uses local Qwen2.5 3B generation with checked clickable citations, scoped follow-ups and local history. Explicit extractive answers remain available when the runtime is unavailable.
-
-Start from PowerShell in this directory using `./scripts/start.ps1`, then open [CloudVault](http://127.0.0.1:8000). For the optional approved generation runtime use `./scripts/setup-ai.ps1` once and `./scripts/warmup.ps1` before a demonstration. No paid AI API or new AWS service is used. Existing S3 usage can still incur ordinary storage/request charges.
-
-Read [local AI setup](docs/LOCAL_AI_SETUP.md), [RAG architecture](docs/RAG_ARCHITECTURE.md), [design system](docs/DESIGN_SYSTEM.md), [performance](docs/PERFORMANCE_REPORT.md) and [upgrade audit](docs/UPGRADE_AUDIT.md). The baseline is tagged `cloudvault-v1-baseline`; earlier reports are preserved in docs/history/v1.
-
----
-
-# CloudVault
-
-**AWS-Based Intelligent Cloud File Storage System with Semantic Search**  
-Store intelligently. Search effortlessly.
-
-CloudVault stores original files in your existing private Sydney Amazon S3 bucket. A local FastAPI service extracts text, builds genuine all-MiniLM-L6-v2 sentence embeddings on the CPU, and persists metadata, complete extracted text, chunks and vectors in SQLite. A new React/TypeScript interface provides file management and semantic, exact keyword, hybrid and filename search.
-
-## Open the application
-
-From PowerShell:
+Start from PowerShell in this directory:
 
 ```powershell
-cd C:\Users\hp\Downloads\RAGStack-Lambda-main\CloudVault
-.\scripts\start.ps1
+./scripts/start.ps1
+./scripts/warmup.ps1
 ```
 
-Open [CloudVault](http://127.0.0.1:8000). API documentation: [OpenAPI](http://127.0.0.1:8000/docs). One localhost server serves both the production frontend and backend; no Docker or cloud deployment is necessary.
+Open [CloudVault](http://127.0.0.1:8000). The landing page opens the workspace at `/workspace`; direct routes include `/workspace/files`, `/workspace/search`, `/workspace/ask` and `/workspace/cloud`. API reference: [local OpenAPI](http://127.0.0.1:8000/docs). Stop only the owned application with `./scripts/stop.ps1`; stop its separately owned AI runtime with `./scripts/stop-ai.ps1`.
 
-First-time setup or reconstruction:
+Existing models, data and credentials are already configured. Do not rerun setup or download weights for a normal start. If reconstructing the source in another environment, review `docs/LOCAL_AI_SETUP.md` and `.env.example`, then `scripts/setup.ps1`. Authentication refresh uses `aws login --profile default`; never commit credentials.
 
-```powershell
-.\scripts\setup.ps1
-```
+## Delivered
 
-Stop only the CloudVault-owned server:
+- Premium light/dark/system landing and workspace, file grid/list/stars, safe preview, upload progress, command palette and keyboard navigation.
+- Real storage/type/activity charts, actual index/model status and timestamped CloudWatch metrics/job history.
+- Private S3 originals, DynamoDB metadata and actual S3 Vectors semantic queries. Exact, hybrid and filename search retained.
+- Genuine local Qwen2.5 3B generation from multi-document hybrid evidence, checked clickable citations, follow-ups, Stop, conversation history and explicit extractive fallback.
+- Real bounded S3 → EventBridge → SQS → Lambda → Standard Step Functions → DynamoDB cloud stage; outbound local completion to cloud vectors. IAM HTTP API, Standard SSM configuration, scoped IAM and CloudFormation.
 
-```powershell
-.\scripts\stop.ps1
-```
+UI/API, MiniLM embedding generation, complete extracted text, local fallback index and Qwen generation run on this laptop. AWS never calls localhost. The application is a private single-user lab system, not a publicly hosted multi-tenant SaaS.
 
-If AWS authentication expires, run `aws login --profile default`, complete the browser login, then retry. Never add root keys or permanent credentials to source files. `.env.example` contains non-secret configuration; setup copies it only when `.env` is absent.
+## Financial boundary
 
-## Demonstrate the project
+**₹0 out of pocket; never upgrade the AWS Free plan.** Final account evidence: FREE/ACTIVE, US$140 promotional credit, expiry 24 May 2027. Application cloud calls fail closed on unknown/expired/Paid/low-credit status. Event rule and SQS consumer are paused between bounded rehearsals. Eligible storage/requests still consume credits; a cached guard is not an AWS billing cap. See [cost controls](docs/AWS_COST_ESTIMATE.md) and [cleanup](docs/COST_AND_CLEANUP.md).
 
-The eight original sample documents have been uploaded through the website during validation. Start with Smart Search: “Where can I store my digital files remotely?” Then select Exact keyword and enter `remotely managed`. Download the matching original and compare it to `samples/object-storage.txt`. Settings shows the actual AWS diagnostic. The AWS console should show the recorded key under `cloudvault/files/` in `cloudvault-d0c2b49b4347`.
+## Evidence and evaluation
 
-See [evaluation guide](docs/EVALUATION_GUIDE.md), [test evidence](docs/TEST_REPORT.md), [project report](docs/PROJECT_REPORT.md) and [viva preparation](docs/VIVA_QUESTIONS.md). Raw AWS object manifests, real cosine scores and byte comparisons are recorded in `docs/LIVE_VERIFICATION*.json`.
+Read [handover](docs/FINAL_HANDOVER.md), [architecture](docs/ARCHITECTURE.md), [real AWS verification](docs/AWS_LIVE_VERIFICATION.md), [resource inventory](docs/AWS_RESOURCE_INVENTORY.md), [tests](docs/TEST_REPORT.md), [demo guide](docs/EVALUATION_GUIDE.md) and [requirements status](REQUIREMENTS_STATUS.md). `RESUME_CHECKPOINT.md` records exactly what to resume. Source attribution and original LICENSE/NOTICE are retained; historical reports are under `docs/history`.
 
-## Manual development and checks
-
-```powershell
-cd backend
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-# Another terminal, if editing frontend:
-cd C:\Users\hp\Downloads\RAGStack-Lambda-main\CloudVault\frontend
-npm run dev
-```
-
-The Vite development server on port 5173 proxies `/api` to port 8000. Restart the backend after making a production build so it mounts the latest assets.
-
-```powershell
-cd C:\Users\hp\Downloads\RAGStack-Lambda-main\CloudVault\backend
-.\.venv\Scripts\python.exe -m pytest -q
-.\.venv\Scripts\ruff.exe check app tests
-cd ..\frontend
-npm run typecheck
-npm run lint
-npm test
-npm run build
-npm audit
-```
-
-## Scope and safeguards
-
-Single-user localhost operation only. S3 holds originals; SQLite and AI run locally. Do not expose this service on a public interface. Unsupported binaries remain downloadable but are not content indexed. Scanned PDFs need OCR. Text preview is inert escaped text. Each upload gets a UUID key; imported `cloudvault-test.txt` is protected from deletion. Index failures retain stored originals and can be retried. No paid AI API, Bedrock, Lambda or additional AWS infrastructure is used. S3 requests, storage and transfer may consume credits; AWS is not permanently free.
-
-## Attribution
-
-Preserved foundation: [HatmanStack/RAGStack-Lambda](https://github.com/HatmanStack/RAGStack-Lambda), copyright 2024 Christopher Galliart. Original Apache 2.0 LICENSE and NOTICE are retained here and at the workspace root. CloudVault is a new simplified application alongside that foundation; it does not claim the upstream implementation as original work. See [contribution summary](docs/PROJECT_CONTRIBUTIONS.md) and [source audit](docs/SOURCE_AUDIT.md).
-
-
+Checks: `backend/.venv/Scripts/python.exe -m pytest backend/tests -q`; `backend/.venv/Scripts/ruff.exe check backend/app backend/tests`; in `frontend`, `npm run build`, `npm run lint`, `npm test`. Current results: 46 backend and 12 frontend tests passing. Real cloud/model/browser evidence is separate from isolated unit tests.

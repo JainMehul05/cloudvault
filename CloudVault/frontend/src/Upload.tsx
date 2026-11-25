@@ -249,8 +249,9 @@ export default function Upload({
             Discovered intelligently.
           </h2>
           <p>
-            Original bytes go to your existing S3 bucket. Extracted text and AI
-            embeddings stay on this computer.
+            Original bytes go to your private S3 bucket. AI embeddings are
+            generated on this computer and stored in your private AWS vector
+            index. Document answers are generated locally.
           </p>
           <hr />
           <h3>Content search supported</h3>

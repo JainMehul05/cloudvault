@@ -2,6 +2,7 @@ from functools import lru_cache
 import boto3
 from botocore.config import Config
 from .config import settings
+from . import cost_guard
 
 
 @lru_cache
@@ -10,13 +11,19 @@ def session():
 
 
 @lru_cache
-def s3():
+def _s3_client():
     return session().client(
         "s3",
         config=Config(
             connect_timeout=5, read_timeout=30, retries={"max_attempts": 2, "mode": "standard"}
         ),
     )
+
+
+def s3():
+    if not cost_guard.permitted():
+        raise cost_guard.FreePlanRequiredError()
+    return _s3_client()
 
 
 def diagnostics():

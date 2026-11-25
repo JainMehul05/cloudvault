@@ -1,3 +1,16 @@
+# Cloud semantic search in 3.0
+
+MiniLM query/document embeddings are generated locally (384D, normalized). The active dense provider executes real AWS S3 Vectors QueryVectors with cosine distance, model/scope prefilters and ENHANCED query mode. Similarity is 1 minus cosine distance, bounded to [-1,1]. Results must match active local file/chunk/text-hash keys, so stale/deleted versions do not appear.
+
+Stored original vectors were migrated and verified without re-embedding. Pending cloud indexing or SDK failure activates an explicit local matrix fallback. Filename and exact keyword modes preserve original behavior; hybrid uses FTS/BM25 and dense RRF with relative thresholds, deduplication and diversity. The frontend displays the actual response provider rather than a fixed AWS label.
+
+All ten final curated queries rank first through actual AWS; see SEARCH_EVALUATION.md. No extra reranker/model was downloaded because this set showed no measured ranking gain to justify its memory cost.
+
+
+---
+
+## Preserved implementation detail
+
 # Search update: version 2.0
 
 The four original user-visible search modes and literal phrase contract remain unchanged. Semantic and hybrid searches now reuse a cached vector snapshot and bounded query embedding cache. Assistant retrieval is a separate chunk-level path: dense MiniLM plus FTS5/BM25 reciprocal rank fusion, relevance gates, deduplication and multi-file diversity. The same stored document vectors are retained. See [RAG architecture](RAG_ARCHITECTURE.md). Similarity is a cosine score, never a probability or guarantee of truth.

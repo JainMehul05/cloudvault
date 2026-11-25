@@ -1,0 +1,62 @@
+{
+  "test": "local-only non-sensitive contradiction fixture, actual Qwen model",
+  "generated": {
+    "insufficient": false,
+    "claims": [
+      {
+        "text": "Policy A retains audit logs for 30 days before deletion.",
+        "sources": [
+          1
+        ],
+        "quotes": [
+          "Policy A retains audit logs for 30 days before deletion."
+        ]
+      },
+      {
+        "text": "Policy B retains audit logs for 90 days before deletion.",
+        "sources": [
+          2
+        ],
+        "quotes": [
+          "Policy B retains audit logs for 90 days before deletion."
+        ]
+      }
+    ]
+  },
+  "validated_claims": [
+    {
+      "text": "Policy A retains audit logs for 30 days before deletion.",
+      "citations": [
+        1
+      ],
+      "quotes": [
+        "Policy A retains audit logs for 30 days before deletion."
+      ]
+    },
+    {
+      "text": "Policy B retains audit logs for 90 days before deletion.",
+      "citations": [
+        2
+      ],
+      "quotes": [
+        "Policy B retains audit logs for 90 days before deletion."
+      ]
+    }
+  ],
+  "timing": {
+    "total_duration": 11520606800,
+    "load_duration": 9553216100,
+    "prompt_eval_count": 446,
+    "prompt_eval_duration": 459968000,
+    "eval_count": 111,
+    "eval_duration": 1443320000
+  },
+  "both_sources_cited": true,
+  "invented_resolution_manual_review_required": false,
+  "manual_review": {
+    "both_policy_values_match_quotes": true,
+    "both_actual_source_ids_used": true,
+    "no_invented_resolution": true,
+    "note": "Reviewed actual generated claims: Policy A 30 days and Policy B 90 days; no reconciliation was invented."
+  }
+}

@@ -2781,6 +2781,7 @@ dialog::backdrop {
   }
   .main-shell {
     margin: 0;
+    transition: none;
   }
   .mobile-menu {
     display: flex;

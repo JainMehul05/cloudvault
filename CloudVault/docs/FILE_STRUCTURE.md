@@ -1,3 +1,14 @@
+# 3.0 additions
+
+Frontend: Application.tsx, Landing.tsx, DashboardAnalytics.tsx, CloudInfrastructure.tsx, Brand.tsx, routes.ts, theme.ts and product.css extend the preserved workspace. Backend: cloud.py, cost_guard.py and analytics.py add actual cloud providers, financial guard and real metrics. database.py adds schema3/outbox. infrastructure/worker.py and cloudvault-stack.json contain the deployed source/template.
+
+Scripts provision-cloud.py, sync-cloud.py and deploy-serverless.py are gated mutation tools; verify-cloud-api.py, verify-cloud-workflow.py, reconcile-one-file.py, verify-cloud-failures.py, monitor-cloud.py, evaluate-retrieval.py and verify-preservation.py produce real evidence. cleanup-preview.py is read-only with no destructive option. .runtime manifests, credentials, models, databases, backups and binaries remain ignored. RESUME_CHECKPOINT.md is the resume entry point.
+
+
+---
+
+## Preserved implementation detail
+
 # File structure
 
 | Path | Responsibility |

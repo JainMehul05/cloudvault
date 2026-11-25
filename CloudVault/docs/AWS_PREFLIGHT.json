@@ -1,0 +1,151 @@
+{
+  "checked_at": "2026-11-24T15:54:28.328298+00:00",
+  "region": "ap-southeast-2",
+  "results": {
+    "identity": {
+      "service": "sts",
+      "operation": "get_caller_identity",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "plan": {
+      "service": "freetier",
+      "operation": "get_account_plan_state",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "bucket_location": {
+      "service": "s3",
+      "operation": "get_bucket_location",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "bucket_encryption": {
+      "service": "s3",
+      "operation": "get_bucket_encryption",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "public_access": {
+      "service": "s3",
+      "operation": "get_public_access_block",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "notifications": {
+      "service": "s3",
+      "operation": "get_bucket_notification_configuration",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "vectors": {
+      "service": "s3vectors",
+      "operation": "list_vector_buckets",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "metadata": {
+      "service": "dynamodb",
+      "operation": "list_tables",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "compute": {
+      "service": "lambda",
+      "operation": "list_functions",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "logs": {
+      "service": "logs",
+      "operation": "describe_log_groups",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "api": {
+      "service": "apigatewayv2",
+      "operation": "get_apis",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "queue": {
+      "service": "sqs",
+      "operation": "list_queues",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "events": {
+      "service": "events",
+      "operation": "list_rules",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "workflow": {
+      "service": "stepfunctions",
+      "operation": "list_state_machines",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "notifications_topic": {
+      "service": "sns",
+      "operation": "list_topics",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "parameters": {
+      "service": "ssm",
+      "operation": "describe_parameters",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    },
+    "infrastructure": {
+      "service": "cloudformation",
+      "operation": "list_stacks",
+      "read": "succeeded",
+      "provision": "not attempted",
+      "write": "not attempted",
+      "invoke": "not attempted"
+    }
+  },
+  "plan": {
+    "accountPlanType": "FREE",
+    "accountPlanStatus": "ACTIVE",
+    "accountPlanRemainingCredits": {
+      "amount": 100.0,
+      "unit": "USD"
+    },
+    "accountPlanExpirationDate": "2027-05-24 10:27:24.967000+00:00"
+  }
+}

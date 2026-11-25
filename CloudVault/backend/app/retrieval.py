@@ -7,6 +7,7 @@ import numpy as np
 from .config import settings
 from .database import connect
 from .embeddings import engine
+from .cloud import dense_scores
 
 STOP = set(
     "a an the is are was were what which who how why when where can could would should does do did to of in on for and or by with from my me please explain describe tell about information documents document files file according uploaded all compare summarize summary".split()
@@ -71,7 +72,8 @@ def retrieve(question, file_ids=None, limit=7):
     if len(engine.load().tokenizer.encode(query_text)) > engine.load().max_seq_length:
         query_text = engine.chunks([("Question", question)])[0][1]
     vector = _query(settings.embedding_model, query_text)
-    scores = matrix[indices] @ vector
+    all_scores, provider = dense_scores(rows, matrix, vector, file_ids)
+    scores = all_scores[indices]
     dense = sorted(zip(indices, scores), key=lambda p: float(p[1]), reverse=True)[:40]
     lexical = []
     tokens = list(dict.fromkeys(terms(question)))[:24]
@@ -95,7 +97,7 @@ def retrieve(question, file_ids=None, limit=7):
         if i not in dense_indices and rows[i]["id"] in lexical_rank
     )
     ranking = []
-    relative_floor = max(settings.evidence_threshold, float(scores.max()) * 0.60)
+    relative_floor = max(settings.evidence_threshold, float(scores.max()) * 0.70)
     for rank, (i, score) in enumerate(dense, 1):
         row = rows[i]
         overlap = len(set(tokens) & set(terms(row["text"])))
@@ -153,4 +155,5 @@ def retrieve(question, file_ids=None, limit=7):
         "candidate_chunks": len(indices),
         "selected_chunks": len(sources),
         "context_characters": budget,
+        "retrieval_backend": provider,
     }
